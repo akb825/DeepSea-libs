@@ -62,7 +62,7 @@ Building for Android requires passing in the SDK location. A `build-custom-andro
 
 	#!/bin/sh
 	set -e
-	./build.sh -p android --android-sdk /mnt/Scratch/Android -o DeepSea-libs-android.tar.gz	
+	./build.sh -p android --android-sdk "$HOME/Android" -o DeepSea-libs-android.tar.gz
 
 ## macOS
 
@@ -75,7 +75,7 @@ Once an older version is installed, a `build-custom.sh` such as the following ca
 	#!/bin/sh
 	set -e
 	export DEVELOPER_DIR=/Applications/Xcode-7.3.1.app/Contents/Developer
-	./build.sh -DCMAKE_OSX_SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk
+	./build.sh -DCMAKE_OSX_SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -o DeepSea-libs-mac.tar.gz
 	
 ## Windows
 
