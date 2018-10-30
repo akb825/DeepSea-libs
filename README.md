@@ -21,6 +21,7 @@ The following software is required to build DeepSea-libs:
 
 * [cmake](https://cmake.org/) 3.1 or later. This must be in your `PATH`.
 * [7zip](https://www.7-zip.org/) is required on Windows.
+* Powershell is required on Windows.
 * [curl](https://curl.haxx.se/) is required on Linux and macOS.
 
 # Compiling
@@ -79,7 +80,7 @@ Once an older version is installed, a `build-custom.sh` such as the following ca
 	
 ## Windows
 
-Windows is configured to create the 32-bit build by default. If your system is set up to find the 64-bit boost by default, you may need to have build `build-custom.bat` file to set the path for the 32-bit libraries. An example is:
+Windows is configured to build for 32-bit by default. You can also build for 64-bit by specifying the "win64" platform. The following is an example `build-custom.batch` script that can be used:
 
 	@echo off
-	.\build.bat "-DBOOST_LIBRARYDIR=C:\local\boost_1_68_0\lib32-msvc-14.0"
+	.\build.bat -p win64 -o DeepSea-libs-win64.zip
