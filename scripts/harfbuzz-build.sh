@@ -10,5 +10,5 @@ curl "https://www.freedesktop.org/software/harfbuzz/release/$NAME.tar.bz2" --out
 tar xjf "$NAME.tar.bz2"
 
 pushd "$NAME" > /dev/null
-"$DIR/$PLATFORM-build.sh" $FLAGS $@
+"$DIR/$PLATFORM-compile.sh" $FLAGS $@
 popd > /dev/null

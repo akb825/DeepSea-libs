@@ -17,5 +17,5 @@ else
 fi
 
 pushd "$NAME" > /dev/null
-"$DIR/$PLATFORM-build.sh" $FLAGS $@
+"$DIR/$PLATFORM-compile.sh" $FLAGS $@
 popd > /dev/null

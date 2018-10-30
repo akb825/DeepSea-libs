@@ -11,5 +11,5 @@ curl "https://gigenet.dl.sourceforge.net/project/freetype/freetype2/$VERSION/$NA
 tar xjf "$NAME.tar.bz2"
 
 pushd "$NAME" > /dev/null
-"$DIR/$PLATFORM-build.sh" $FLAGS $@
+"$DIR/$PLATFORM-compile.sh" $FLAGS $@
 popd > /dev/null
