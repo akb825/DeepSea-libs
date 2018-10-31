@@ -40,19 +40,16 @@ For example, on Ubuntu the following packages should be installed:
 For macOS using [Homebrew](https://brew.sh/), the following packages should be installed:
 
 * cmake
-* ragel
 
-To perform the build, simply run the `build.sh` script. Additional CMake options can be passed in as command line options, such as for cross-compiling for other systems. Once finished, the `DeepSea-libs.tar.gz` package will contain the tools.
+To perform the build, simply run the `build.sh` script. Additional CMake options can be passed in as command line options, such as for cross-compiling for other systems. Once finished, the `DeepSea-libs.tar.gz` package will contain the libraries.
 
 > **Note:** If you want to keep a script around for custom arguments without checking it into source control, create a script named `build-custom.sh`. This is in `.gitignore` so it won't show as a locally modified file.
 
 ## Windows
 
-The default setup for Windows is to build with Visual Studio 2017 using the v140 toolset. (i.e. Visual Studio 2015 toolset, but from the Visual Studio 2017 installer)
+To perform the build, simply run the `build.bat` script. Additional CMake options can be passed in as command line options, such as for cross-compiling for other systems. Once finished, the `DeepSea-libs.zip` package will contain the libraries.
 
-[Ragel](http://www.colm.net/open-source/ragel/) must be built first in order to build HarfBuzz. This must be done using [MinGW](https://sourceforge.net/projects/mingw/). Be sure to install the `developer-tools`, `base`, and `gcc-g++` packages, then run `C:\MinGW\msys\1.0\msys.bat` for the console to perform the build. (use `/c/` prefix for paths to the C: drive) Also add `C:\MinGW\bin` to `PATH` to make sure `ragel` can be run oustide of a MinGW console.
-
-Once `ragel` is built and on the `PATH` environment variable, you can run `build.bat` to perform the build for the DeepSea dependencies.
+> **Note:** If you want to keep a script around for custom arguments without checking it into source control, create a script named `build-custom.bat`. This is in `.gitignore` so it won't show as a locally modified file.
 
 # Example custom build scripts
 
