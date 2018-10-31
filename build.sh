@@ -18,6 +18,7 @@ PLATFORM=native
 OUTPUT="$DIR/DeepSea-libs.tar.gz"
 CMAKE_ARGS=
 ANDROID_SDK=
+ANDROID_ABI=
 ANDROID_VERSION=android-18
 
 function printHelp {
@@ -32,6 +33,12 @@ function printHelp {
 	echo "                             the extension."
 	echo "--android-sdk <dir>          Directory of the Android SDK root. Must be set"
 	echo "                             when platform is set to 'android'."
+	echo "--android-abi <abi>          The Android ABI to build for. Must be set when"
+	echo "                             platform is set to 'android'. Must be one of:"
+	echo "                             - x86"
+	echo "                             - x86_64"
+	echo "                             - armeabi-v7a"
+	echo "                             - arm64-v8a"
 	echo "--android-version <version>  Version to use when building for Android. Defaults"
 	echo "                             to $ANDROID_VERSION"
 }
@@ -68,6 +75,20 @@ do
 			shift
 			ANDROID_SDK="$1"
 			;;
+		--android-abi)
+			shift
+			case "$1" in
+				x86|x86_64|armeabi-v7a|arm64-v8a)
+					ANDROID_ABI=$1
+					;;
+				*)
+					echo "Unknown Android ABI: $1"
+					echo
+					printHelp
+					exit 1
+				;;
+			esac
+			;;
 		--android-version)
 			shift
 			ANDROID_VERSION="$1"
@@ -87,7 +108,12 @@ fi
 
 if [ $PLATFORM = android ]; then
 	if [ -z "$ANDROID_SDK" ]; then
-		echo "The --android-sdk must be given when building for Android."
+		echo "The --android-sdk option must be given when building for Android."
+		echo
+		printHelp
+		exit 1
+	elif [ -z "$ANDROID_ABI" ]; then
+		echo "The --android-abi option must be given when building for Android."
 		echo
 		printHelp
 		exit 1
@@ -97,6 +123,7 @@ if [ $PLATFORM = android ]; then
 	fi
 
 	export ANDROID_SDK
+	export ANDROID_ABI
 	export ANDROID_VERSION
 fi
 
