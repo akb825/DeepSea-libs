@@ -15,7 +15,7 @@ set BUILD_DIR="%DIR%build"
 set PLATFORM=native
 set OUTPUT="%DIR%DeepSea-libs.zip"
 set CMAKE_ARGS=
-set CMAKE_PLATFORM_ARGS="-DCMAKE_GENERATOR_PLATFORM=x86"
+set CMAKE_PLATFORM_ARGS="-DCMAKE_GENERATOR_PLATFORM=Win32"
 set TOOLSET=v140
 
 :parseArgs
@@ -31,7 +31,7 @@ if not "%1"=="" (
 		if "%1"=="--platform" set MATCH=1
 		if defined MATCH (
 			if "%2"=="win32" (
-				set CMAKE_PLATFORM_ARGS="-DCMAKE_GENERATOR_PLATFORM=x86"
+				set CMAKE_PLATFORM_ARGS="-DCMAKE_GENERATOR_PLATFORM=Win32"
 			) else (
 				if "%2"=="win64" (
 					set CMAKE_PLATFORM_ARGS="-DCMAKE_GENERATOR_PLATFORM=x64"
