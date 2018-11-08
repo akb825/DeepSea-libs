@@ -9,7 +9,7 @@ set NAME=SDL2-%VERSION%
 powershell -Command "(New-Object Net.WebClient).DownloadFile('http://libsdl.org/release/%NAME%.zip', '%NAME%.zip')"
 7z x "%NAME%.zip"
 cd "%NAME%"
-call "%DIR%\%PLATFORM%-compile.bat" -DSDL_SHARED=OFF %*
+call "%DIR%\%PLATFORM%-compile.bat" -DSDL_SHARED=OFF %FLAGS% %*
 if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
 
 cd %BUILD_DIR%

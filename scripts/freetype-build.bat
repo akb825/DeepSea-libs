@@ -10,7 +10,7 @@ powershell -Command "(New-Object Net.WebClient).DownloadFile('https://gigenet.dl
 7z e "%NAME%.tar.bz2"
 7z x "%NAME%.tar"
 cd "%NAME%"
-call "%DIR%\%PLATFORM%-compile.bat" -DUNIX=ON %*
+call "%DIR%\%PLATFORM%-compile.bat" -DUNIX=ON %FLAGS% %*
 if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
 
 cd %BUILD_DIR%
