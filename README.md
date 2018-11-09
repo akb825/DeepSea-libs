@@ -13,7 +13,6 @@ This builds the following libraries:
 * [FreeType](https://www.freetype.org/) (not built for Linux)
 * [SDL](http://libsdl.org/)
 * [Google Test](https://github.com/google/googletest)
-* [ragel](http://www.colm.net/open-source/ragel/) for platforms that build HarfBuzz.
 
 # Dependencies
 
