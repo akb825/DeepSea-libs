@@ -1,0 +1,13 @@
+--- a/CMakeLists.txt	2018-11-08 21:13:26.000000000 -0800
++++ b/CMakeLists.txt	2018-11-08 21:13:41.000000000 -0800
+@@ -1772,9 +1772,7 @@
+   RUNTIME DESTINATION bin)
+ 
+ ##### Export files #####
+-if (APPLE)
+-  set(PKG_PREFIX "SDL2.framework/Resources")
+-elseif (WINDOWS)
++if (WINDOWS)
+   set(PKG_PREFIX "cmake")
+ else ()
+   set(PKG_PREFIX "lib/cmake/SDL2")

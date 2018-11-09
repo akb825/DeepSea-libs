@@ -13,6 +13,9 @@ if [ $PLATFORM = android ]; then
 	patch -p1 -d "$NAME" -i "$DIR/sdl-android-support.patch"
 	FLAGS="$FLAGS -DSDL_STATIC=OFF"
 else
+	if [ $PLATFORM = native -a "$(uname)" = "Darwin" ]; then
+		patch -p1 -d "$NAME" -i "$DIR/sdl-mac-packaging.patch"
+	fi
 	FLAGS="$FLAGS -DSDL_SHARED=OFF"
 fi
 
