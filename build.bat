@@ -4,12 +4,6 @@ set PREV_DIR=%cd%
 set DIR=%~dp0
 cd "%DIR%"
 
-rmdir install /S /Q > nul 2>&1
-mkdir install
-
-rmdir build /S /Q > nul 2>&1
-mkdir build
-
 set INSTALL_DIR="%DIR%install"
 set BUILD_DIR="%DIR%build"
 set PLATFORM=native
@@ -55,6 +49,12 @@ if not "%1"=="" (
 	shift /1
 	goto :parseArgs
 )
+
+rmdir install /S /Q > nul 2>&1
+mkdir install
+
+rmdir build /S /Q > nul 2>&1
+mkdir build
 
 set LIBS=freetype harfbuzz sdl gtest
 cd build

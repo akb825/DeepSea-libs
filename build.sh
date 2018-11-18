@@ -6,12 +6,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 CWD="$( pwd )"
 cd "$DIR"
 
-rm -rf build
-mkdir build
-
-rm -rf install
-mkdir install
-
 INSTALL_DIR="$DIR/install"
 BUILD_DIR="$DIR/build"
 PLATFORM=native
@@ -129,6 +123,12 @@ fi
 
 export PLATFORM
 export INSTALL_DIR
+
+rm -rf build
+mkdir build
+
+rm -rf install
+mkdir install
 
 cd "$BUILD_DIR" 
 for LIB in "${LIBRARIES[@]}"
