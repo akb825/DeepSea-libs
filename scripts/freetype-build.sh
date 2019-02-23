@@ -6,7 +6,7 @@ VERSION="$( cat "$DIR/freetype.version" )"
 FLAGS="$( cat "$DIR/freetype.flags" )"
 NAME="freetype-$VERSION"
 
-curl "https://gigenet.dl.sourceforge.net/project/freetype/freetype2/$VERSION/$NAME.tar.bz2" \
+curl -L "https://download.savannah.gnu.org/releases/freetype/$NAME.tar.bz2" \
 	--output "$NAME.tar.bz2"
 tar xjf "$NAME.tar.bz2"
 

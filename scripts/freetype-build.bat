@@ -6,7 +6,7 @@ set /P VERSION=<"%DIR%\freetype.version"
 set /P FLAGS=<"%DIR%\freetype.flags"
 set NAME=freetype-%VERSION%
 
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://gigenet.dl.sourceforge.net/project/freetype/freetype2/%VERSION%/%NAME%.tar.bz2', '%NAME%.tar.bz2')"
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.savannah.gnu.org/releases/freetype/%NAME%.tar.bz2', '%NAME%.tar.bz2')"
 7z e "%NAME%.tar.bz2"
 7z x "%NAME%.tar"
 cd "%NAME%"
