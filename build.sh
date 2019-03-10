@@ -11,7 +11,7 @@ BUILD_DIR="$DIR/build"
 PLATFORM=native
 OUTPUT="$DIR/DeepSea-libs.tar.gz"
 CMAKE_ARGS=
-ANDROID_SDK=
+ANDROID_NDK=
 ANDROID_ABI=
 ANDROID_VERSION=android-18
 
@@ -25,7 +25,7 @@ function printHelp {
 	echo "-o, --output <file>          The file to output the archive. Note that the"
 	echo "                             archive format will always be .tar.gz regardless of"
 	echo "                             the extension."
-	echo "--android-sdk <dir>          Directory of the Android SDK root. Must be set"
+	echo "--android-ndk <dir>          Directory of the Android NDK root. Must be set"
 	echo "                             when platform is set to 'android'."
 	echo "--android-abi <abi>          The Android ABI to build for. Must be set when"
 	echo "                             platform is set to 'android'. Must be one of:"
@@ -65,9 +65,9 @@ do
 				OUTPUT="$CWD/$OUTPUT"
 			fi
 			;;
-		--android-sdk)
+		--android-ndk)
 			shift
-			ANDROID_SDK="$1"
+			ANDROID_NDK="$1"
 			;;
 		--android-abi)
 			shift
@@ -101,8 +101,8 @@ else
 fi
 
 if [ $PLATFORM = android ]; then
-	if [ -z "$ANDROID_SDK" ]; then
-		echo "The --android-sdk option must be given when building for Android."
+	if [ -z "$ANDROID_NDK" ]; then
+		echo "The --android-ndk option must be given when building for Android."
 		echo
 		printHelp
 		exit 1
@@ -111,12 +111,12 @@ if [ $PLATFORM = android ]; then
 		echo
 		printHelp
 		exit 1
-	elif [ ! -d "$ANDROID_SDK" ]; then
-		echo "Android SDK locaton '$ANDROID_SDK' doesn't exist."
+	elif [ ! -d "$ANDROID_NDK" ]; then
+		echo "Android NDK locaton '$ANDROID_NDK' doesn't exist."
 		exit 1
 	fi
 
-	export ANDROID_SDK
+	export ANDROID_NDK
 	export ANDROID_ABI
 	export ANDROID_VERSION
 fi

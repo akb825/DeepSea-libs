@@ -60,11 +60,11 @@ Building for Android requires passing in the SDK location. A `build-custom-andro
 
 	#!/usr/bin/env bash
 	set -e
-	SDK_DIR=/mnt/Scratch/Android
+	NDK_DIR=$HOME/Android/Sdk/ndk-bundle
 	ABIS=(x86 x86_64 armeabi-v7a arm64-v8a)
 	for ABI in "${ABIS[@]}"
 	do
-		./build.sh -p android --android-sdk "$SDK_DIR" --android-abi $ABI \
+		./build.sh -p android --android-ndk "$NDK_DIR" --android-abi $ABI \
 			-o DeepSea-libs-android-$ABI.tar.gz
 	done
 
