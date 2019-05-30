@@ -7,7 +7,11 @@ FLAGS="$( cat "$DIR/harfbuzz.flags" )"
 NAME="harfbuzz-$VERSION"
 
 curl "https://www.freedesktop.org/software/harfbuzz/release/$NAME.tar.xz" --output "$NAME.tar.xz"
-tar xzf "$NAME.tar.xz"
+if [ "$(uname)" = "Darwin" ]; then
+	tar xzf "$NAME.tar.xz"
+else
+	tar xJf "$NAME.tar.xz"
+fi
 
 pushd "$NAME" > /dev/null
 "$DIR/$PLATFORM-compile.sh" $FLAGS $@
