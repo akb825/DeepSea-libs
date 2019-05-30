@@ -8,7 +8,7 @@ set NAME=harfbuzz-%VERSION%
 
 echo https://gigenet.dl.sourceforge.net/project/harfbuzz/harfbuzz2/%NAME%.tar.xz
 echo %NAME%.tar.xz
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.freedesktop.org/software/harfbuzz/release/%NAME%.tar.bz2', '%NAME%.tar.bz2')"
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.freedesktop.org/software/harfbuzz/release/%NAME%.tar.xz', '%NAME%.tar.xz')"
 7z e "%NAME%.tar.xz"
 7z x "%NAME%.tar"
 cd "%NAME%"
