@@ -6,10 +6,10 @@ set /P VERSION=<"%DIR%\harfbuzz.version"
 set /P FLAGS=<"%DIR%\harfbuzz.flags"
 set NAME=harfbuzz-%VERSION%
 
-echo https://gigenet.dl.sourceforge.net/project/harfbuzz/harfbuzz2/%NAME%.tar.bz2
-echo %NAME%.tar.bz2
+echo https://gigenet.dl.sourceforge.net/project/harfbuzz/harfbuzz2/%NAME%.tar.xz
+echo %NAME%.tar.xz
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.freedesktop.org/software/harfbuzz/release/%NAME%.tar.bz2', '%NAME%.tar.bz2')"
-7z e "%NAME%.tar.bz2"
+7z e "%NAME%.tar.xz"
 7z x "%NAME%.tar"
 cd "%NAME%"
 call "%DIR%\%PLATFORM%-compile.bat" %FLAGS% %*

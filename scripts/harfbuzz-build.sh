@@ -6,8 +6,8 @@ VERSION="$( cat "$DIR/harfbuzz.version" )"
 FLAGS="$( cat "$DIR/harfbuzz.flags" )"
 NAME="harfbuzz-$VERSION"
 
-curl "https://www.freedesktop.org/software/harfbuzz/release/$NAME.tar.bz2" --output "$NAME.tar.bz2"
-tar xjf "$NAME.tar.bz2"
+curl "https://www.freedesktop.org/software/harfbuzz/release/$NAME.tar.xz" --output "$NAME.tar.xz"
+tar xzf "$NAME.tar.xz"
 
 pushd "$NAME" > /dev/null
 "$DIR/$PLATFORM-compile.sh" $FLAGS $@
