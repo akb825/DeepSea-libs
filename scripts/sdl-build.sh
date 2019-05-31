@@ -10,12 +10,12 @@ curl "http://libsdl.org/release/$NAME.tar.gz" --output "$NAME.tar.gz"
 tar xzf "$NAME.tar.gz"
 
 if [ $PLATFORM = android ]; then
-	patch -p1 -d "$NAME" -i "$DIR/sdl-android-support.patch"
+	patch -p1 -d "$NAME" -i "$DIR/sdl-no-gl-default.patch"
 	FLAGS="$FLAGS -DSDL_STATIC=OFF"
 else
 	if [[ ( $PLATFORM = native && "$(uname)" = "Darwin" ) || $PLATFORM = ios ]]; then
 		patch -p1 -d "$NAME" -i "$DIR/sdl-mac-packaging.patch"
-		patch -p1 -d "$NAME" -i "$DIR/sdl-metal-support.patch"
+		patch -p1 -d "$NAME" -i "$DIR/sdl-no-gl-default.patch"
 	fi
 	FLAGS="$FLAGS -DSDL_SHARED=OFF"
 fi
