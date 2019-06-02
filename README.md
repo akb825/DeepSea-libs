@@ -68,6 +68,14 @@ Building for Android requires passing in the SDK location. A `build-custom-andro
 			-o DeepSea-libs-android-$ABI.tar.gz
 	done
 
+## iOS
+
+Building for iOS is very straight forward. The following is an example `build-custom.sh` that can be  used:
+
+	#!/bin/sh
+	set -e
+	./build.sh -p ios -o DeepSea-libs-ios.tar.gz
+
 ## macOS
 
 In order to support earlier than the current version of macOS (such as back in the ye olde days when it was still called Mac OS X), you need to download an older version of XCode. You can download rather old versions of XCode from Apple's developer website, though it's quite limited how far back will actually run on a modern system. When running macOS 10.14, the furthest back I could go is XCode 7.3.1. This would allow building against the Mac OS X 10.11 SDK.

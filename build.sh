@@ -14,6 +14,7 @@ CMAKE_ARGS=
 ANDROID_NDK=
 ANDROID_ABI=
 ANDROID_VERSION=android-18
+IOS_TARGET=10.0
 
 function printHelp {
 	echo "Usage: `basename "$0"` [options] [CMake args...]"
@@ -22,6 +23,7 @@ function printHelp {
 	echo "-p, --platform <platform>    The platform to build for. Valid platforms are:"
 	echo "                             - native (default)"
 	echo "                             - android"
+	echo "                             - ios"
 	echo "-o, --output <file>          The file to output the archive. Note that the"
 	echo "                             archive format will always be .tar.gz regardless of"
 	echo "                             the extension."
@@ -35,6 +37,8 @@ function printHelp {
 	echo "                             - arm64-v8a"
 	echo "--android-version <version>  Version to use when building for Android. Defaults"
 	echo "                             to $ANDROID_VERSION"
+	echo "--ios-target <version>       Version to use when building for iOS. Defaults to"
+	echo "                             $IOS_TARGET"
 }
 
 while [ $# -gt 0 ]
@@ -47,7 +51,7 @@ do
 		-p|--platform)
 			shift
 			case "$1" in
-				native|android)
+				native|android|ios)
 					PLATFORM=$1
 					;;
 				*)
@@ -87,6 +91,10 @@ do
 			shift
 			ANDROID_VERSION="$1"
 			;;
+		--ios-target)
+			shift
+			IOS_TARGET="$1"
+			;;
 		*)
 			CMAKE_ARGS="$CMAKE_ARGS $1"
 			;;
@@ -119,6 +127,8 @@ if [ $PLATFORM = android ]; then
 	export ANDROID_NDK
 	export ANDROID_ABI
 	export ANDROID_VERSION
+elif [ $PLATFORM = ios ]; then
+	export IOS_TARGET
 fi
 
 export PLATFORM

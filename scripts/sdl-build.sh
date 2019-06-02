@@ -16,6 +16,9 @@ else
 	if [[ ( $PLATFORM = native && "$(uname)" = "Darwin" ) || $PLATFORM = ios ]]; then
 		patch -p1 -d "$NAME" -i "$DIR/sdl-mac-packaging.patch"
 		patch -p1 -d "$NAME" -i "$DIR/sdl-no-gl-default.patch"
+		if [ $PLATFORM = ios ]; then
+			patch -p1 -d "$NAME" -i "$DIR/sdl-ios-fix.patch"
+		fi
 	fi
 	FLAGS="$FLAGS -DSDL_SHARED=OFF"
 fi
