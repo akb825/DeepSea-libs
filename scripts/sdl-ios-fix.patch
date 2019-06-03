@@ -15,7 +15,7 @@ index 0128c7ac7..b37b8fc18 100644
      endif()
      set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
 diff --git a/include/SDL_config.h.cmake b/include/SDL_config.h.cmake
-index 48dd2d41b..035a3587f 100644
+index 48dd2d41b..49aa1ca30 100644
 --- a/include/SDL_config.h.cmake
 +++ b/include/SDL_config.h.cmake
 @@ -100,22 +100,13 @@
@@ -51,3 +51,11 @@ index 48dd2d41b..035a3587f 100644
  #cmakedefine HAVE_SIGACTION 1
  #cmakedefine HAVE_SA_SIGACTION 1
  #cmakedefine HAVE_SETJMP 1
+@@ -320,6 +309,7 @@
+ #cmakedefine SDL_VIDEO_DRIVER_ANDROID @SDL_VIDEO_DRIVER_ANDROID@
+ #cmakedefine SDL_VIDEO_DRIVER_HAIKU @SDL_VIDEO_DRIVER_HAIKU@
+ #cmakedefine SDL_VIDEO_DRIVER_COCOA @SDL_VIDEO_DRIVER_COCOA@
++#cmakedefine SDL_VIDEO_DRIVER_UIKIT @SDL_VIDEO_DRIVER_UIKIT@
+ #cmakedefine SDL_VIDEO_DRIVER_DIRECTFB @SDL_VIDEO_DRIVER_DIRECTFB@
+ #cmakedefine SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC @SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC@
+ #cmakedefine SDL_VIDEO_DRIVER_DUMMY @SDL_VIDEO_DRIVER_DUMMY@
