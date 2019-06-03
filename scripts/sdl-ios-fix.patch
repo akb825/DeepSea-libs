@@ -1,3 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0128c7ac7..b37b8fc18 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1412,10 +1412,10 @@ elseif(APPLE)
+   endif()
+ 
+   if(SDL_JOYSTICK)
+-    set(SDL_JOYSTICK_IOKIT 1)
+     if (IOS)
+       file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/iphoneos/*.m ${SDL2_SOURCE_DIR}/src/joystick/steam/*.c)
+     else()
++      set(SDL_JOYSTICK_IOKIT 1)
+       file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/darwin/*.c)
+     endif()
+     set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
 diff --git a/include/SDL_config.h.cmake b/include/SDL_config.h.cmake
 index 48dd2d41b..035a3587f 100644
 --- a/include/SDL_config.h.cmake
