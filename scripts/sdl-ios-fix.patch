@@ -59,3 +59,140 @@ index 48dd2d41b..49aa1ca30 100644
  #cmakedefine SDL_VIDEO_DRIVER_DIRECTFB @SDL_VIDEO_DRIVER_DIRECTFB@
  #cmakedefine SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC @SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC@
  #cmakedefine SDL_VIDEO_DRIVER_DUMMY @SDL_VIDEO_DRIVER_DUMMY@
+diff --git a/src/video/uikit/SDL_uikitevents.m b/src/video/uikit/SDL_uikitevents.m
+index d64e3301c..cfdbc77a8 100644
+--- a/src/video/uikit/SDL_uikitevents.m
++++ b/src/video/uikit/SDL_uikitevents.m
+@@ -65,7 +65,9 @@ UIKit_PumpEvents(_THIS)
+     } while(result == kCFRunLoopRunHandledSource);
+ 
+     /* See the comment in the function definition. */
++#if SDL_VIDEO_OPENGL
+     UIKit_GL_RestoreCurrentContext();
++#endif
+ }
+ 
+ #endif /* SDL_VIDEO_DRIVER_UIKIT */
+diff --git a/src/video/uikit/SDL_uikitopengles.h b/src/video/uikit/SDL_uikitopengles.h
+index 6b57289ff..32f8c7645 100644
+--- a/src/video/uikit/SDL_uikitopengles.h
++++ b/src/video/uikit/SDL_uikitopengles.h
+@@ -21,6 +21,8 @@
+ #ifndef SDL_uikitopengles_
+ #define SDL_uikitopengles_
+ 
++#if SDL_VIDEO_OPENGL
++
+ #include "../SDL_sysvideo.h"
+ 
+ extern int UIKit_GL_MakeCurrent(_THIS, SDL_Window * window,
+@@ -35,6 +37,8 @@ extern int UIKit_GL_LoadLibrary(_THIS, const char *path);
+ 
+ extern void UIKit_GL_RestoreCurrentContext(void);
+ 
++#endif // SDL_VIDEO_OPENGL
++
+ #endif /* SDL_uikitopengles_ */
+ 
+ /* vi: set ts=4 sw=4 expandtab: */
+diff --git a/src/video/uikit/SDL_uikitopengles.m b/src/video/uikit/SDL_uikitopengles.m
+index 2f6dec45e..d3129d913 100644
+--- a/src/video/uikit/SDL_uikitopengles.m
++++ b/src/video/uikit/SDL_uikitopengles.m
+@@ -20,7 +20,7 @@
+ */
+ #include "../../SDL_internal.h"
+ 
+-#if SDL_VIDEO_DRIVER_UIKIT
++#if SDL_VIDEO_DRIVER_UIKIT && SDL_VIDEO_OPENGL
+ 
+ #include "SDL_uikitopengles.h"
+ #import "SDL_uikitopenglview.h"
+diff --git a/src/video/uikit/SDL_uikitopenglview.h b/src/video/uikit/SDL_uikitopenglview.h
+index 8d12c9ff8..6ee683ebc 100644
+--- a/src/video/uikit/SDL_uikitopenglview.h
++++ b/src/video/uikit/SDL_uikitopenglview.h
+@@ -19,6 +19,8 @@
+   3. This notice may not be removed or altered from any source distribution.
+ */
+ 
++#if SDL_VIDEO_OPENGL
++
+ #import <UIKit/UIKit.h>
+ #import <OpenGLES/EAGL.h>
+ #import <OpenGLES/ES3/gl.h>
+@@ -57,4 +59,6 @@
+ 
+ @end
+ 
++#endif // SDL_VIDEO_OPENGL
++
+ /* vi: set ts=4 sw=4 expandtab: */
+diff --git a/src/video/uikit/SDL_uikitopenglview.m b/src/video/uikit/SDL_uikitopenglview.m
+index 902437632..4df1ea1dd 100644
+--- a/src/video/uikit/SDL_uikitopenglview.m
++++ b/src/video/uikit/SDL_uikitopenglview.m
+@@ -20,7 +20,7 @@
+ */
+ #include "../../SDL_internal.h"
+ 
+-#if SDL_VIDEO_DRIVER_UIKIT
++#if SDL_VIDEO_DRIVER_UIKIT && SDL_VIDEO_OPENGL
+ 
+ #include <OpenGLES/EAGLDrawable.h>
+ #include <OpenGLES/ES2/glext.h>
+diff --git a/src/video/uikit/SDL_uikitvideo.m b/src/video/uikit/SDL_uikitvideo.m
+index 10d1dde31..561e4a8b3 100644
+--- a/src/video/uikit/SDL_uikitvideo.m
++++ b/src/video/uikit/SDL_uikitvideo.m
+@@ -115,6 +115,7 @@ UIKit_CreateDevice(int devindex)
+         device->HasClipboardText = UIKit_HasClipboardText;
+ 
+         /* OpenGL (ES) functions */
++#if SDL_VIDEO_OPENGL
+         device->GL_MakeCurrent      = UIKit_GL_MakeCurrent;
+         device->GL_GetDrawableSize  = UIKit_GL_GetDrawableSize;
+         device->GL_SwapWindow       = UIKit_GL_SwapWindow;
+@@ -122,6 +123,7 @@ UIKit_CreateDevice(int devindex)
+         device->GL_DeleteContext    = UIKit_GL_DeleteContext;
+         device->GL_GetProcAddress   = UIKit_GL_GetProcAddress;
+         device->GL_LoadLibrary      = UIKit_GL_LoadLibrary;
++#endif
+         device->free = UIKit_DeleteDevice;
+ 
+ #if SDL_VIDEO_VULKAN
+diff --git a/src/video/uikit/SDL_uikitviewcontroller.m b/src/video/uikit/SDL_uikitviewcontroller.m
+index 49a39b6bc..e1ab1fbf4 100644
+--- a/src/video/uikit/SDL_uikitviewcontroller.m
++++ b/src/video/uikit/SDL_uikitviewcontroller.m
+@@ -173,7 +173,9 @@ SDL_HideHomeIndicatorHintChanged(void *userdata, const char *name, const char *o
+     /* Don't run the game loop while a messagebox is up */
+     if (!UIKit_ShowingMessageBox()) {
+         /* See the comment in the function definition. */
++#if SDL_VIDEO_OPENGL
+         UIKit_GL_RestoreCurrentContext();
++#endif
+ 
+         animationCallback(animationCallbackParam);
+     }
+diff --git a/src/video/uikit/SDL_uikitwindow.m b/src/video/uikit/SDL_uikitwindow.m
+index d01cff349..ae065f378 100644
+--- a/src/video/uikit/SDL_uikitwindow.m
++++ b/src/video/uikit/SDL_uikitwindow.m
+@@ -354,12 +354,16 @@ UIKit_GetWindowWMInfo(_THIS, SDL_Window * window, SDL_SysWMinfo * info)
+ 
+             /* These struct members were added in SDL 2.0.4. */
+             if (versionnum >= SDL_VERSIONNUM(2,0,4)) {
++#if SDL_VIDEO_OPENGL
+                 if ([data.viewcontroller.view isKindOfClass:[SDL_uikitopenglview class]]) {
+                     SDL_uikitopenglview *glview = (SDL_uikitopenglview *)data.viewcontroller.view;
+                     info->info.uikit.framebuffer = glview.drawableFramebuffer;
+                     info->info.uikit.colorbuffer = glview.drawableRenderbuffer;
+                     info->info.uikit.resolveFramebuffer = glview.msaaResolveFramebuffer;
+                 } else {
++#else
++                {
++#endif
+                     info->info.uikit.framebuffer = 0;
+                     info->info.uikit.colorbuffer = 0;
+                     info->info.uikit.resolveFramebuffer = 0;
