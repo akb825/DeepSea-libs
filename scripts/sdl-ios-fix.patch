@@ -86,10 +86,10 @@ index b5c0c650c..4a61b9981 100644
  extern void UIKit_QuitModes(_THIS);
  extern int UIKit_GetDisplayUsableBounds(_THIS, SDL_VideoDisplay * display, SDL_Rect * rect);
 diff --git a/src/video/uikit/SDL_uikitmodes.m b/src/video/uikit/SDL_uikitmodes.m
-index 7ddf1078a..24255b8a0 100644
+index 7ddf1078a..f24a57d5d 100644
 --- a/src/video/uikit/SDL_uikitmodes.m
 +++ b/src/video/uikit/SDL_uikitmodes.m
-@@ -242,6 +242,30 @@ UIKit_GetDisplayModes(_THIS, SDL_VideoDisplay * display)
+@@ -242,6 +242,31 @@ UIKit_GetDisplayModes(_THIS, SDL_VideoDisplay * display)
      }
  }
  
@@ -100,7 +100,8 @@ index 7ddf1078a..24255b8a0 100644
 +        SDL_DisplayData *data = (__bridge SDL_DisplayData *) display->driverdata;
 +
 +        float scale = (float)data.uiscreen.scale;
-+        const float defaultDPI = 72.0; /* Default DPI for Macs: no direct way to get pixel size. */
++        /* Default DPI, based on iPhone 1: no direct way to get pixel size. */
++        const float defaultDPI = 165.0;
 +        float dpi = scale*defaultDPI;
 +
 +        if (ddpi) {
