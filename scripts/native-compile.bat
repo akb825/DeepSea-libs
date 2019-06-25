@@ -5,7 +5,7 @@ rmdir build /S /Q > nul 2>&1
 mkdir build
 cd build
 
-cmake .. -G "Visual Studio 15 2017" -DCMAKE_FIND_ROOT_PATH="%INSTALL_DIR%" ^
+cmake .. -DCMAKE_FIND_ROOT_PATH="%INSTALL_DIR%" ^
 	-DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%" -DCMAKE_CXX_FLAGS=/MP -DCMAKE_C_FLAGS=/MP %*
 if %ERRORLEVEL% neq 0 exit /B %ERRORLEVEL%
 cmake --build . --config Release
