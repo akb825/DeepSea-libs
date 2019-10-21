@@ -1,21 +1,5 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 0128c7ac7..b37b8fc18 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -1412,10 +1412,10 @@ elseif(APPLE)
-   endif()
- 
-   if(SDL_JOYSTICK)
--    set(SDL_JOYSTICK_IOKIT 1)
-     if (IOS)
-       file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/iphoneos/*.m ${SDL2_SOURCE_DIR}/src/joystick/steam/*.c)
-     else()
-+      set(SDL_JOYSTICK_IOKIT 1)
-       file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/darwin/*.c)
-     endif()
-     set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
 diff --git a/include/SDL_config.h.cmake b/include/SDL_config.h.cmake
-index 48dd2d41b..49aa1ca30 100644
+index 5e9e5bcea..008442dde 100644
 --- a/include/SDL_config.h.cmake
 +++ b/include/SDL_config.h.cmake
 @@ -100,22 +100,13 @@
@@ -51,7 +35,7 @@ index 48dd2d41b..49aa1ca30 100644
  #cmakedefine HAVE_SIGACTION 1
  #cmakedefine HAVE_SA_SIGACTION 1
  #cmakedefine HAVE_SETJMP 1
-@@ -320,6 +309,7 @@
+@@ -322,6 +311,7 @@
  #cmakedefine SDL_VIDEO_DRIVER_ANDROID @SDL_VIDEO_DRIVER_ANDROID@
  #cmakedefine SDL_VIDEO_DRIVER_HAIKU @SDL_VIDEO_DRIVER_HAIKU@
  #cmakedefine SDL_VIDEO_DRIVER_COCOA @SDL_VIDEO_DRIVER_COCOA@
@@ -60,7 +44,7 @@ index 48dd2d41b..49aa1ca30 100644
  #cmakedefine SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC @SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC@
  #cmakedefine SDL_VIDEO_DRIVER_DUMMY @SDL_VIDEO_DRIVER_DUMMY@
 diff --git a/src/video/uikit/SDL_uikitevents.m b/src/video/uikit/SDL_uikitevents.m
-index d64e3301c..cfdbc77a8 100644
+index 278e2e6ed..f4782168a 100644
 --- a/src/video/uikit/SDL_uikitevents.m
 +++ b/src/video/uikit/SDL_uikitevents.m
 @@ -65,7 +65,9 @@ UIKit_PumpEvents(_THIS)
@@ -74,7 +58,7 @@ index d64e3301c..cfdbc77a8 100644
  
  #endif /* SDL_VIDEO_DRIVER_UIKIT */
 diff --git a/src/video/uikit/SDL_uikitmodes.h b/src/video/uikit/SDL_uikitmodes.h
-index b5c0c650c..4a61b9981 100644
+index d6faa11fe..cbe01a271 100644
 --- a/src/video/uikit/SDL_uikitmodes.h
 +++ b/src/video/uikit/SDL_uikitmodes.h
 @@ -41,6 +41,7 @@ extern SDL_bool UIKit_IsDisplayLandscape(UIScreen *uiscreen);
@@ -86,10 +70,10 @@ index b5c0c650c..4a61b9981 100644
  extern void UIKit_QuitModes(_THIS);
  extern int UIKit_GetDisplayUsableBounds(_THIS, SDL_VideoDisplay * display, SDL_Rect * rect);
 diff --git a/src/video/uikit/SDL_uikitmodes.m b/src/video/uikit/SDL_uikitmodes.m
-index 7ddf1078a..f24a57d5d 100644
+index be34b0691..f566c7f32 100644
 --- a/src/video/uikit/SDL_uikitmodes.m
 +++ b/src/video/uikit/SDL_uikitmodes.m
-@@ -242,6 +242,31 @@ UIKit_GetDisplayModes(_THIS, SDL_VideoDisplay * display)
+@@ -243,6 +243,31 @@ UIKit_GetDisplayModes(_THIS, SDL_VideoDisplay * display)
      }
  }
  
@@ -122,7 +106,7 @@ index 7ddf1078a..f24a57d5d 100644
  UIKit_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode * mode)
  {
 diff --git a/src/video/uikit/SDL_uikitopengles.h b/src/video/uikit/SDL_uikitopengles.h
-index 6b57289ff..32f8c7645 100644
+index d08f4ac3e..e37017302 100644
 --- a/src/video/uikit/SDL_uikitopengles.h
 +++ b/src/video/uikit/SDL_uikitopengles.h
 @@ -21,6 +21,8 @@
@@ -144,7 +128,7 @@ index 6b57289ff..32f8c7645 100644
  
  /* vi: set ts=4 sw=4 expandtab: */
 diff --git a/src/video/uikit/SDL_uikitopengles.m b/src/video/uikit/SDL_uikitopengles.m
-index 2f6dec45e..d3129d913 100644
+index 68d8f1d56..71298c600 100644
 --- a/src/video/uikit/SDL_uikitopengles.m
 +++ b/src/video/uikit/SDL_uikitopengles.m
 @@ -20,7 +20,7 @@
@@ -157,7 +141,7 @@ index 2f6dec45e..d3129d913 100644
  #include "SDL_uikitopengles.h"
  #import "SDL_uikitopenglview.h"
 diff --git a/src/video/uikit/SDL_uikitopenglview.h b/src/video/uikit/SDL_uikitopenglview.h
-index 8d12c9ff8..6ee683ebc 100644
+index a2657a3ea..5051a83c7 100644
 --- a/src/video/uikit/SDL_uikitopenglview.h
 +++ b/src/video/uikit/SDL_uikitopenglview.h
 @@ -19,6 +19,8 @@
@@ -177,7 +161,7 @@ index 8d12c9ff8..6ee683ebc 100644
 +
  /* vi: set ts=4 sw=4 expandtab: */
 diff --git a/src/video/uikit/SDL_uikitopenglview.m b/src/video/uikit/SDL_uikitopenglview.m
-index 902437632..4df1ea1dd 100644
+index b3ffbe895..e7988a653 100644
 --- a/src/video/uikit/SDL_uikitopenglview.m
 +++ b/src/video/uikit/SDL_uikitopenglview.m
 @@ -20,7 +20,7 @@
@@ -190,7 +174,7 @@ index 902437632..4df1ea1dd 100644
  #include <OpenGLES/EAGLDrawable.h>
  #include <OpenGLES/ES2/glext.h>
 diff --git a/src/video/uikit/SDL_uikitvideo.m b/src/video/uikit/SDL_uikitvideo.m
-index 10d1dde31..f03860862 100644
+index cea40b239..b9824ded0 100644
 --- a/src/video/uikit/SDL_uikitvideo.m
 +++ b/src/video/uikit/SDL_uikitvideo.m
 @@ -88,6 +88,7 @@ UIKit_CreateDevice(int devindex)
@@ -218,63 +202,101 @@ index 10d1dde31..f03860862 100644
  
  #if SDL_VIDEO_VULKAN
 diff --git a/src/video/uikit/SDL_uikitview.m b/src/video/uikit/SDL_uikitview.m
-index caabfac07..ab0b1a075 100644
+index eccd81d96..e7229ed8c 100644
 --- a/src/video/uikit/SDL_uikitview.m
 +++ b/src/video/uikit/SDL_uikitview.m
-@@ -39,7 +39,6 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+@@ -38,9 +38,6 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+ 
  @implementation SDL_uikitview {
      SDL_Window *sdlwindow;
- 
--    SDL_TouchID touchId;
-     UITouch * __weak firstFingerDown;
+-
+-    SDL_TouchID directTouchId;
+-    SDL_TouchID indirectTouchId;
  }
  
-@@ -71,9 +70,6 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+ - (instancetype)initWithFrame:(CGRect)frame
+@@ -68,12 +65,8 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+         self.autoresizesSubviews = YES;
+ 
+-        directTouchId = 1;
+-        indirectTouchId = 2;
+-
  #if !TARGET_OS_TV
          self.multipleTouchEnabled = YES;
+-        SDL_AddTouch(directTouchId, SDL_TOUCH_DEVICE_DIRECT, "");
  #endif
--
--        touchId = 1;
--        SDL_AddTouch(touchId, "");
      }
  
-     return self;
-@@ -178,6 +174,9 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
-         }
+@@ -149,17 +142,6 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+     return SDL_TOUCH_DEVICE_DIRECT;
+ }
+ 
+-- (SDL_TouchID)touchIdForType:(SDL_TouchDeviceType)type
+-{
+-    switch (type) {
+-        case SDL_TOUCH_DEVICE_DIRECT:
+-        default:
+-            return directTouchId;
+-        case SDL_TOUCH_DEVICE_INDIRECT_RELATIVE:
+-            return indirectTouchId;
+-    }
+-}
+-
+ - (CGPoint)touchLocation:(UITouch *)touch shouldNormalize:(BOOL)normalize
+ {
+     CGPoint point = [touch locationInView:self];
+@@ -188,7 +170,7 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+ {
+     for (UITouch *touch in touches) {
+         SDL_TouchDeviceType touchType = [self touchTypeForTouch:touch];
+-        SDL_TouchID touchId = [self touchIdForType:touchType];
++        SDL_TouchID touchId = (SDL_TouchID)touch;
+         float pressure = [self pressureForTouch:touch];
+ 
+         if (SDL_AddTouch(touchId, touchType, "") < 0) {
+@@ -198,6 +180,7 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+         /* FIXME, need to send: int clicks = (int) touch.tapCount; ? */
  
          CGPoint locationInView = [self touchLocation:touch shouldNormalize:YES];
 +
-+        SDL_TouchID touchId = (SDL_TouchID)touch;
-+        SDL_AddTouch(touchId, "");
          SDL_SendTouch(touchId, (SDL_FingerID)((size_t)touch),
                        SDL_TRUE, locationInView.x, locationInView.y, pressure);
      }
-@@ -196,8 +195,11 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
-         }
+@@ -207,7 +190,7 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+ {
+     for (UITouch *touch in touches) {
+         SDL_TouchDeviceType touchType = [self touchTypeForTouch:touch];
+-        SDL_TouchID touchId = [self touchIdForType:touchType];
++        SDL_TouchID touchId = (SDL_TouchID)touch;
+         float pressure = [self pressureForTouch:touch];
+ 
+         if (SDL_AddTouch(touchId, touchType, "") < 0) {
+@@ -217,8 +200,10 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+         /* FIXME, need to send: int clicks = (int) touch.tapCount; ? */
  
          CGPoint locationInView = [self touchLocation:touch shouldNormalize:YES];
 +
-+        SDL_TouchID touchId = (SDL_TouchID)touch;
          SDL_SendTouch(touchId, (SDL_FingerID)((size_t)touch),
                        SDL_FALSE, locationInView.x, locationInView.y, pressure);
 +        SDL_DelTouch(touchId);
      }
  }
  
-@@ -219,6 +221,8 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
-         }
- 
-         CGPoint locationInView = [self touchLocation:touch shouldNormalize:YES];
-+
+@@ -231,7 +216,7 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
+ {
+     for (UITouch *touch in touches) {
+         SDL_TouchDeviceType touchType = [self touchTypeForTouch:touch];
+-        SDL_TouchID touchId = [self touchIdForType:touchType];
 +        SDL_TouchID touchId = (SDL_TouchID)touch;
-         SDL_SendTouchMotion(touchId, (SDL_FingerID)((size_t)touch),
-                             locationInView.x, locationInView.y, pressure);
-     }
+         float pressure = [self pressureForTouch:touch];
+ 
+         if (SDL_AddTouch(touchId, touchType, "") < 0) {
 diff --git a/src/video/uikit/SDL_uikitviewcontroller.m b/src/video/uikit/SDL_uikitviewcontroller.m
-index 49a39b6bc..e1ab1fbf4 100644
+index 17221ebb0..65ade1250 100644
 --- a/src/video/uikit/SDL_uikitviewcontroller.m
 +++ b/src/video/uikit/SDL_uikitviewcontroller.m
-@@ -173,7 +173,9 @@ SDL_HideHomeIndicatorHintChanged(void *userdata, const char *name, const char *o
+@@ -180,7 +180,9 @@ SDL_HideHomeIndicatorHintChanged(void *userdata, const char *name, const char *o
      /* Don't run the game loop while a messagebox is up */
      if (!UIKit_ShowingMessageBox()) {
          /* See the comment in the function definition. */
@@ -285,10 +307,10 @@ index 49a39b6bc..e1ab1fbf4 100644
          animationCallback(animationCallbackParam);
      }
 diff --git a/src/video/uikit/SDL_uikitwindow.m b/src/video/uikit/SDL_uikitwindow.m
-index d01cff349..ae065f378 100644
+index 456122383..91d4cec03 100644
 --- a/src/video/uikit/SDL_uikitwindow.m
 +++ b/src/video/uikit/SDL_uikitwindow.m
-@@ -354,12 +354,16 @@ UIKit_GetWindowWMInfo(_THIS, SDL_Window * window, SDL_SysWMinfo * info)
+@@ -364,12 +364,16 @@ UIKit_GetWindowWMInfo(_THIS, SDL_Window * window, SDL_SysWMinfo * info)
  
              /* These struct members were added in SDL 2.0.4. */
              if (versionnum >= SDL_VERSIONNUM(2,0,4)) {

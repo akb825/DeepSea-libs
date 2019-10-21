@@ -103,7 +103,7 @@ do
 done
 
 if [ $PLATFORM = native -a "$(uname)" = "Linux" ]; then
-	LIBRARIES=(sdl gtest)
+	LIBRARIES=(gtest)
 else
 	LIBRARIES=(freetype harfbuzz sdl gtest)
 fi

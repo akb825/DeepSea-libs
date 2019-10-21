@@ -10,7 +10,6 @@ set PLATFORM=native
 set OUTPUT="%DIR%DeepSea-libs.zip"
 set CMAKE_ARGS=
 set CMAKE_PLATFORM_ARGS=-A Win32
-set TOOLSET=v140
 
 :parseArgs
 if not "%1"=="" (
@@ -65,7 +64,7 @@ for %%L in (%LIBS%) do (
 		cd %PREV_DIR%
 		exit /B !ERRORLEVEL!
 	)
-	call "!DIR!scripts\%%L-build.bat" -T!TOOLSET! !CMAKE_PLATFORM_ARGS! !CMAKE_ARGS!
+	call "!DIR!scripts\%%L-build.bat" !CMAKE_PLATFORM_ARGS! !CMAKE_ARGS!
 	if !ERRORLEVEL! neq 0 (
 		cd %PREV_DIR%
 		exit /B !ERRORLEVEL!

@@ -6,9 +6,9 @@ VERSION="$( cat "$DIR/freetype.version" )"
 FLAGS="$( cat "$DIR/freetype.flags" )"
 NAME="freetype-$VERSION"
 
-curl -L "https://download.savannah.gnu.org/releases/freetype/$NAME.tar.bz2" \
-	--output "$NAME.tar.bz2"
-tar xjf "$NAME.tar.bz2"
+curl -L "https://download.savannah.gnu.org/releases/freetype/$NAME.tar.xz" \
+	--output "$NAME.tar.xz"
+tar xJf "$NAME.tar.xz"
 
 pushd "$NAME" > /dev/null
 "$DIR/$PLATFORM-compile.sh" $FLAGS $@

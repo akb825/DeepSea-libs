@@ -6,8 +6,8 @@ set /P VERSION=<"%DIR%\freetype.version"
 set /P FLAGS=<"%DIR%\freetype.flags"
 set NAME=freetype-%VERSION%
 
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.savannah.gnu.org/releases/freetype/%NAME%.tar.bz2', '%NAME%.tar.bz2')"
-7z e "%NAME%.tar.bz2"
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.savannah.gnu.org/releases/freetype/%NAME%.tar.xz', '%NAME%.tar.xz')"
+7z e "%NAME%.tar.xz"
 7z x "%NAME%.tar"
 cd "%NAME%"
 call "%DIR%\%PLATFORM%-compile.bat" -DUNIX=ON %FLAGS% %*

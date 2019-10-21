@@ -11,8 +11,10 @@ This builds the following libraries:
 
 * [HarfBuzz](http://harfbuzz.org/) (not built for Linux)
 * [FreeType](https://www.freetype.org/) (not built for Linux)
-* [SDL](http://libsdl.org/)
+* [SDL](http://libsdl.org/) (not built for Linux)
 * [Google Test](https://github.com/google/googletest)
+
+[![Build Status](https://dev.azure.com/akb825/DeepSea/_apis/build/status/akb825.DeepSea-libs?branchName=master)](https://dev.azure.com/akb825/DeepSea/_build/latest?definitionId=4&branchName=master)
 
 # Dependencies
 

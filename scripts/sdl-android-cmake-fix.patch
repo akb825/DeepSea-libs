@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bd59d89b2..a42bd4392 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1826,10 +1826,8 @@ if(SDL_SHARED)
+   endif()
+ endif()
+ 
+-if(ANDROID)
+-  if(HAVE_HIDAPI)
+-    add_library(hidapi SHARED ${SDL2_SOURCE_DIR}/src/hidapi/android/hid.cpp)
+-  endif()
++if(ANDROID AND HAVE_HIDAPI)
++  add_library(hidapi SHARED ${SDL2_SOURCE_DIR}/src/hidapi/android/hid.cpp)
+ 
+   if(MSVC AND NOT LIBC)
+     # Don't try to link with the default set of libraries.
