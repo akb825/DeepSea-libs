@@ -12,7 +12,7 @@ tar xzf "$NAME.tar.gz"
 if [ $PLATFORM = android ]; then
 	patch -p1 -d "$NAME" -i "$DIR/sdl-android-cmake-fix.patch"
 	patch -p1 -d "$NAME" -i "$DIR/sdl-no-gl-default.patch"
-	FLAGS="$FLAGS -DSDL_STATIC=OFF -DHIDAPI=OFF"
+	FLAGS="$FLAGS -DSDL_STATIC=OFF"
 else
 	if [[ ( $PLATFORM = native && "$(uname)" = "Darwin" ) || $PLATFORM = ios ]]; then
 		patch -p1 -d "$NAME" -i "$DIR/sdl-no-gl-default.patch"
