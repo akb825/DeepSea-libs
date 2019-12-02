@@ -67,7 +67,7 @@ index 278e2e6ed..f4782168a 100644
      } while(result == kCFRunLoopRunHandledSource);
  
      /* See the comment in the function definition. */
-+#if SDL_VIDEO_OPENGL
++#if SDL_VIDEO_OPENGL_ES2
      UIKit_GL_RestoreCurrentContext();
 +#endif
  }
@@ -129,7 +129,7 @@ index d08f4ac3e..e37017302 100644
  #ifndef SDL_uikitopengles_
  #define SDL_uikitopengles_
  
-+#if SDL_VIDEO_OPENGL
++#if SDL_VIDEO_OPENGL_ES2
 +
  #include "../SDL_sysvideo.h"
  
@@ -138,7 +138,7 @@ index d08f4ac3e..e37017302 100644
  
  extern void UIKit_GL_RestoreCurrentContext(void);
  
-+#endif // SDL_VIDEO_OPENGL
++#endif // SDL_VIDEO_OPENGL_ES2
 +
  #endif /* SDL_uikitopengles_ */
  
@@ -152,7 +152,7 @@ index 68d8f1d56..71298c600 100644
  #include "../../SDL_internal.h"
  
 -#if SDL_VIDEO_DRIVER_UIKIT
-+#if SDL_VIDEO_DRIVER_UIKIT && SDL_VIDEO_OPENGL
++#if SDL_VIDEO_DRIVER_UIKIT && SDL_VIDEO_OPENGL_ES2
  
  #include "SDL_uikitopengles.h"
  #import "SDL_uikitopenglview.h"
@@ -164,7 +164,7 @@ index a2657a3ea..5051a83c7 100644
    3. This notice may not be removed or altered from any source distribution.
  */
  
-+#if SDL_VIDEO_OPENGL
++#if SDL_VIDEO_OPENGL_ES2
 +
  #import <UIKit/UIKit.h>
  #import <OpenGLES/EAGL.h>
@@ -173,7 +173,7 @@ index a2657a3ea..5051a83c7 100644
  
  @end
  
-+#endif // SDL_VIDEO_OPENGL
++#endif // SDL_VIDEO_OPENGL_ES2
 +
  /* vi: set ts=4 sw=4 expandtab: */
 diff --git a/src/video/uikit/SDL_uikitopenglview.m b/src/video/uikit/SDL_uikitopenglview.m
@@ -185,7 +185,7 @@ index b3ffbe895..e7988a653 100644
  #include "../../SDL_internal.h"
  
 -#if SDL_VIDEO_DRIVER_UIKIT
-+#if SDL_VIDEO_DRIVER_UIKIT && SDL_VIDEO_OPENGL
++#if SDL_VIDEO_DRIVER_UIKIT && SDL_VIDEO_OPENGL_ES2
  
  #include <OpenGLES/EAGLDrawable.h>
  #include <OpenGLES/ES2/glext.h>
@@ -205,7 +205,7 @@ index cea40b239..b9824ded0 100644
          device->HasClipboardText = UIKit_HasClipboardText;
  
          /* OpenGL (ES) functions */
-+#if SDL_VIDEO_OPENGL
++#if SDL_VIDEO_OPENGL_ES2
          device->GL_MakeCurrent      = UIKit_GL_MakeCurrent;
          device->GL_GetDrawableSize  = UIKit_GL_GetDrawableSize;
          device->GL_SwapWindow       = UIKit_GL_SwapWindow;
@@ -316,7 +316,7 @@ index 17221ebb0..65ade1250 100644
      /* Don't run the game loop while a messagebox is up */
      if (!UIKit_ShowingMessageBox()) {
          /* See the comment in the function definition. */
-+#if SDL_VIDEO_OPENGL
++#if SDL_VIDEO_OPENGL_ES2
          UIKit_GL_RestoreCurrentContext();
 +#endif
  
@@ -330,7 +330,7 @@ index 456122383..91d4cec03 100644
  
              /* These struct members were added in SDL 2.0.4. */
              if (versionnum >= SDL_VERSIONNUM(2,0,4)) {
-+#if SDL_VIDEO_OPENGL
++#if SDL_VIDEO_OPENGL_ES2
                  if ([data.viewcontroller.view isKindOfClass:[SDL_uikitopenglview class]]) {
                      SDL_uikitopenglview *glview = (SDL_uikitopenglview *)data.viewcontroller.view;
                      info->info.uikit.framebuffer = glview.drawableFramebuffer;
