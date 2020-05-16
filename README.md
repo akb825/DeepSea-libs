@@ -3,8 +3,8 @@
 DeepSea-libs provides scripts to build the external libraries dependencies for compiling [DeepSea](https://github.com/akb825/DeepSea). Pre-compiled releases are provided for the following platforms:
 
 * Linux for x86-64 (glibc 2.19 or later)
-* macOS (10.11 or later)
-* Windows for x86 and x86-64
+* macOS (10.13 or later)
+* Windows for x86 and x86-64 with VS 2017 runtime.
 * Android for x86, x86-64, armeabi-v7a, and arm64-v8a.
 
 This builds the following libraries:

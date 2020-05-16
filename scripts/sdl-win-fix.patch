@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7dfd35389..f2960538a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -760,7 +760,7 @@ if(LIBC)
+     set(HAVE_SIGNAL_H 1)
+     foreach(_FN
+             malloc calloc realloc free qsort abs memset memcpy memmove memcmp
+-            wcslen wcslcpy wcslcat wcsdup wcsstr wcscmp wcsncmp
++            wcslen wcsdup wcsstr wcscmp wcsncmp
+             strlen _strrev _strupr _strlwr strchr strrchr strstr itoa _ltoa
+             _ultoa strtol strtoul strtoll strtod atoi atof strcmp strncmp
+             _stricmp _strnicmp strtok_s sscanf

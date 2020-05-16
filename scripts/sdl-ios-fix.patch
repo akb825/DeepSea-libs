@@ -1,428 +1,126 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index bd59d89b2..e4f903795 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -1468,10 +1468,10 @@ elseif(APPLE)
-         set(SOURCE_FILES ${SOURCE_FILES} ${SDL2_SOURCE_DIR}/src/hidapi/mac/hid.c)
-       endif()
-     endif()
--    set(SDL_JOYSTICK_IOKIT 1)
-     if (IOS)
-       file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/iphoneos/*.m ${SDL2_SOURCE_DIR}/src/joystick/steam/*.c)
+diff -r 877c5d06c09e -r a747072c5ae5 CMakeLists.txt
+--- a/CMakeLists.txt	Mon Apr 13 14:48:38 2020 -0400
++++ b/CMakeLists.txt	Mon Apr 13 15:22:09 2020 -0400
+@@ -15,7 +15,6 @@
+ # !!! FIXME:  properly resolved.
+ #cmake_policy(SET CMP0042 OLD)
+ 
+-include(CheckFunctionExists)
+ include(CheckLibraryExists)
+ include(CheckIncludeFiles)
+ include(CheckIncludeFile)
+@@ -789,7 +788,8 @@
+       check_include_file("${_HEADER}" ${_HAVE_H})
+     endforeach()
+ 
+-    check_include_files("dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;strings.h;string.h;float.h" STDC_HEADERS)
++    set(STDC_HEADER_NAMES "dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;stdio.h;strings.h;wchar.h;string.h;float.h")
++    check_include_files("${STDC_HEADER_NAMES}" STDC_HEADERS)
+     check_type_size("size_t" SIZEOF_SIZE_T)
+     check_symbol_exists(M_PI math.h HAVE_M_PI)
+     # TODO: refine the mprotect check
+@@ -803,14 +803,21 @@
+             _uitoa _ultoa strtol strtoul _i64toa _ui64toa strtoll strtoull
+             atoi atof strcmp strncmp _stricmp strcasecmp _strnicmp strncasecmp
+             wcscmp wcsdup wcslcat wcslcpy wcslen wcsncmp wcsstr
+-            sscanf vsscanf vsnprintf fopen64 fseeko fseeko64 sigaction setjmp
+-            nanosleep sysconf sysctlbyname getauxval poll _Exit
++            sscanf vsscanf vsnprintf fopen64 fseeko fseeko64 _Exit
+             )
+       string(TOUPPER ${_FN} _UPPER)
+       set(_HAVEVAR "HAVE_${_UPPER}")
+-      check_function_exists("${_FN}" ${_HAVEVAR})
++      check_symbol_exists("${_FN}" "${STDC_HEADER_NAMES}" ${_HAVEVAR})
+     endforeach()
+ 
++    check_symbol_exists(sigaction "signal.h" HAVE_SIGACTION)
++    check_symbol_exists(setjmp "setjmp.h" HAVE_SETJMP)
++    check_symbol_exists(nanosleep "time.h" HAVE_NANOSLEEP)
++    check_symbol_exists(sysconf "unistd.h" HAVE_SYSCONF)
++    check_symbol_exists(sysctlbyname "sys/types.h;sys/sysctl.h" HAVE_SYSCTLBYNAME)
++    check_symbol_exists(getauxval "sys/auxv.h" HAVE_GETAUXVAL)
++    check_symbol_exists(poll "poll.h" HAVE_POLL)
++
+     check_library_exists(m pow "" HAVE_LIBM)
+     if(HAVE_LIBM)
+       set(CMAKE_REQUIRED_LIBRARIES m)
+@@ -821,7 +828,7 @@
+               asin asinf trunc truncf)
+         string(TOUPPER ${_FN} _UPPER)
+         set(_HAVEVAR "HAVE_${_UPPER}")
+-        check_function_exists("${_FN}" ${_HAVEVAR})
++        check_symbol_exists("${_FN}" "math.h" ${_HAVEVAR})
+       endforeach()
+       set(CMAKE_REQUIRED_LIBRARIES)
+       list(APPEND EXTRA_LIBS m)
+@@ -835,7 +842,7 @@
+ 
+     if(NOT APPLE)
+       check_include_file(alloca.h HAVE_ALLOCA_H)
+-      check_function_exists(alloca HAVE_ALLOCA)
++      check_symbol_exists(alloca "alloca.h" HAVE_ALLOCA)
      else()
-+      set(SDL_JOYSTICK_IOKIT 1)
-       file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/darwin/*.c)
-     endif()
-     set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
-diff --git a/include/SDL_config.h.cmake b/include/SDL_config.h.cmake
-index 5e9e5bcea..008442dde 100644
---- a/include/SDL_config.h.cmake
-+++ b/include/SDL_config.h.cmake
-@@ -100,22 +100,13 @@
- #cmakedefine HAVE_STRLEN 1
- #cmakedefine HAVE_STRLCPY 1
- #cmakedefine HAVE_STRLCAT 1
--#cmakedefine HAVE__STRREV 1
--#cmakedefine HAVE__STRUPR 1
--#cmakedefine HAVE__STRLWR 1
- #cmakedefine HAVE_INDEX 1
- #cmakedefine HAVE_RINDEX 1
- #cmakedefine HAVE_STRCHR 1
- #cmakedefine HAVE_STRRCHR 1
- #cmakedefine HAVE_STRSTR 1
--#cmakedefine HAVE_ITOA 1
--#cmakedefine HAVE__LTOA 1
--#cmakedefine HAVE__UITOA 1
--#cmakedefine HAVE__ULTOA 1
- #cmakedefine HAVE_STRTOL 1
- #cmakedefine HAVE_STRTOUL 1
--#cmakedefine HAVE__I64TOA 1
--#cmakedefine HAVE__UI64TOA 1
- #cmakedefine HAVE_STRTOLL 1
- #cmakedefine HAVE_STRTOULL 1
- #cmakedefine HAVE_STRTOD 1
-@@ -166,9 +157,7 @@
- #cmakedefine HAVE_SQRTF 1
- #cmakedefine HAVE_TAN 1
- #cmakedefine HAVE_TANF 1
--#cmakedefine HAVE_FOPEN64 1
- #cmakedefine HAVE_FSEEKO 1
--#cmakedefine HAVE_FSEEKO64 1
- #cmakedefine HAVE_SIGACTION 1
- #cmakedefine HAVE_SA_SIGACTION 1
- #cmakedefine HAVE_SETJMP 1
-@@ -322,6 +311,7 @@
- #cmakedefine SDL_VIDEO_DRIVER_ANDROID @SDL_VIDEO_DRIVER_ANDROID@
- #cmakedefine SDL_VIDEO_DRIVER_HAIKU @SDL_VIDEO_DRIVER_HAIKU@
- #cmakedefine SDL_VIDEO_DRIVER_COCOA @SDL_VIDEO_DRIVER_COCOA@
-+#cmakedefine SDL_VIDEO_DRIVER_UIKIT @SDL_VIDEO_DRIVER_UIKIT@
- #cmakedefine SDL_VIDEO_DRIVER_DIRECTFB @SDL_VIDEO_DRIVER_DIRECTFB@
- #cmakedefine SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC @SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC@
- #cmakedefine SDL_VIDEO_DRIVER_DUMMY @SDL_VIDEO_DRIVER_DUMMY@
-diff --git a/src/video/uikit/SDL_uikitevents.m b/src/video/uikit/SDL_uikitevents.m
-index 278e2e6ed..4469e5bed 100644
---- a/src/video/uikit/SDL_uikitevents.m
-+++ b/src/video/uikit/SDL_uikitevents.m
-@@ -65,7 +65,9 @@ UIKit_PumpEvents(_THIS)
-     } while(result == kCFRunLoopRunHandledSource);
+       set(HAVE_ALLOCA_H 1)
+       set(HAVE_ALLOCA 1)
+diff -r 877c5d06c09e -r a747072c5ae5 cmake/sdlchecks.cmake
+--- a/cmake/sdlchecks.cmake	Mon Apr 13 14:48:38 2020 -0400
++++ b/cmake/sdlchecks.cmake	Mon Apr 13 15:22:09 2020 -0400
+@@ -30,7 +30,7 @@
+ endmacro()
  
-     /* See the comment in the function definition. */
-+#if SDL_VIDEO_OPENGL_ES2
-     UIKit_GL_RestoreCurrentContext();
-+#endif
- }
+ macro(CheckDLOPEN)
+-  check_function_exists(dlopen HAVE_DLOPEN)
++  check_symbol_exists(dlopen "dlfcn.h" HAVE_DLOPEN)
+   if(NOT HAVE_DLOPEN)
+     foreach(_LIBNAME dl tdl)
+       check_library_exists("${_LIBNAME}" "dlopen" "" DLOPEN_LIB)
+@@ -424,7 +424,7 @@
+         set(X11_SHARED OFF)
+       endif()
  
- #endif /* SDL_VIDEO_DRIVER_UIKIT */
-diff --git a/src/video/uikit/SDL_uikitmodes.h b/src/video/uikit/SDL_uikitmodes.h
-index d6faa11fe..cab81854b 100644
---- a/src/video/uikit/SDL_uikitmodes.h
-+++ b/src/video/uikit/SDL_uikitmodes.h
-@@ -27,7 +27,10 @@
+-      check_function_exists("shmat" HAVE_SHMAT)
++      check_symbol_exists(shmat "sys/shm.h" HAVE_SHMAT)
+       if(NOT HAVE_SHMAT)
+         check_library_exists(ipc shmat "" HAVE_SHMAT)
+         if(HAVE_SHMAT)
+@@ -476,7 +476,7 @@
+         set(SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS 1)
+       endif()
  
- @interface SDL_DisplayData : NSObject
+-      check_function_exists(XkbKeycodeToKeysym SDL_VIDEO_DRIVER_X11_HAS_XKBKEYCODETOKEYSYM)
++      check_symbol_exists(XkbKeycodeToKeysym "X11/Xlib.h;X11/XKBlib.h" SDL_VIDEO_DRIVER_X11_HAS_XKBKEYCODETOKEYSYM)
  
-+- (instancetype)init;
-+
- @property (nonatomic, strong) UIScreen *uiscreen;
-+@property (nonatomic) float screenDPI;
+       if(VIDEO_X11_XCURSOR AND HAVE_XCURSOR_H)
+         set(HAVE_VIDEO_X11_XCURSOR TRUE)
+@@ -901,12 +901,14 @@
+         endif()
+       endif()
  
- @end
+-      check_c_source_compiles("
+-          #include <pthread.h>
+-          #include <pthread_np.h>
+-          int main(int argc, char** argv) { return 0; }" HAVE_PTHREAD_NP_H)
+-      check_function_exists(pthread_setname_np HAVE_PTHREAD_SETNAME_NP)
+-      check_function_exists(pthread_set_name_np HAVE_PTHREAD_SET_NAME_NP)
++      check_include_files("pthread.h" HAVE_PTHREAD_H)
++      check_include_files("pthread_np.h" HAVE_PTHREAD_NP_H)
++      if (HAVE_PTHREAD_H)
++        check_symbol_exists(pthread_setname_np "pthread.h" HAVE_PTHREAD_SETNAME_NP)
++        if (HAVE_PTHREAD_NP_H)
++          check_symbol_exists(pthread_set_name_np "pthread.h;pthread_np.h" HAVE_PTHREAD_SET_NAME_NP)
++        endif()
++      endif()
  
-@@ -41,6 +44,7 @@ extern SDL_bool UIKit_IsDisplayLandscape(UIScreen *uiscreen);
- 
- extern int UIKit_InitModes(_THIS);
- extern void UIKit_GetDisplayModes(_THIS, SDL_VideoDisplay * display);
-+extern int UIKit_GetDisplayDPI(_THIS, SDL_VideoDisplay * display, float * ddpi, float * hdpi, float * vdpi);
- extern int UIKit_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode * mode);
- extern void UIKit_QuitModes(_THIS);
- extern int UIKit_GetDisplayUsableBounds(_THIS, SDL_VideoDisplay * display, SDL_Rect * rect);
-diff --git a/src/video/uikit/SDL_uikitmodes.m b/src/video/uikit/SDL_uikitmodes.m
-index be34b0691..2b40dbb2d 100644
---- a/src/video/uikit/SDL_uikitmodes.m
-+++ b/src/video/uikit/SDL_uikitmodes.m
-@@ -27,9 +27,150 @@
- 
- #include "../../events/SDL_events_c.h"
- 
-+#import <sys/utsname.h>
-+
- @implementation SDL_DisplayData
- 
-+- (instancetype)initWithScreen:(UIScreen*)screen
-+{
-+    if (self = [super init]) {
-+        self.uiscreen = screen;
-+
-+        /*
-+         * A well up to date list of device info can be found here:
-+         * https://github.com/lmirosevic/GBDeviceInfo/blob/master/GBDeviceInfo/GBDeviceInfo_iOS.m
-+         */
-+        NSDictionary* devices = @{
-+            @"iPhone1,1": @163,
-+            @"iPhone1,2": @163,
-+            @"iPhone2,1": @163,
-+            @"iPhone3,1": @326,
-+            @"iPhone3,2": @326,
-+            @"iPhone3,3": @326,
-+            @"iPhone4,1": @326,
-+            @"iPhone5,1": @326,
-+            @"iPhone5,2": @326,
-+            @"iPhone5,3": @326,
-+            @"iPhone5,4": @326,
-+            @"iPhone6,1": @326,
-+            @"iPhone6,2": @326,
-+            @"iPhone7,1": @401,
-+            @"iPhone7,2": @326,
-+            @"iPhone8,1": @326,
-+            @"iPhone8,2": @401,
-+            @"iPhone8,4": @326,
-+            @"iPhone9,1": @326,
-+            @"iPhone9,2": @401,
-+            @"iPhone9,3": @326,
-+            @"iPhone9,4": @401,
-+            @"iPhone10,1": @326,
-+            @"iPhone10,2": @401,
-+            @"iPhone10,3": @458,
-+            @"iPhone10,4": @326,
-+            @"iPhone10,5": @401,
-+            @"iPhone10,6": @458,
-+            @"iPhone11,2": @458,
-+            @"iPhone11,4": @458,
-+            @"iPhone11,6": @458,
-+            @"iPhone11,8": @326,
-+            @"iPhone12,1": @326,
-+            @"iPhone12,3": @458,
-+            @"iPhone12,5": @458,
-+            @"iPad1,1": @132,
-+            @"iPad2,1": @132,
-+            @"iPad2,2": @132,
-+            @"iPad2,3": @132,
-+            @"iPad2,4": @132,
-+            @"iPad2,5": @163,
-+            @"iPad2,6": @163,
-+            @"iPad2,7": @163,
-+            @"iPad3,1": @264,
-+            @"iPad3,2": @264,
-+            @"iPad3,3": @264,
-+            @"iPad3,4": @264,
-+            @"iPad3,5": @264,
-+            @"iPad3,6": @264,
-+            @"iPad4,1": @264,
-+            @"iPad4,2": @264,
-+            @"iPad4,3": @264,
-+            @"iPad4,4": @326,
-+            @"iPad4,5": @326,
-+            @"iPad4,6": @326,
-+            @"iPad4,7": @326,
-+            @"iPad4,8": @326,
-+            @"iPad4,9": @326,
-+            @"iPad5,1": @326,
-+            @"iPad5,2": @326,
-+            @"iPad5,3": @264,
-+            @"iPad5,4": @264,
-+            @"iPad6,3": @264,
-+            @"iPad6,4": @264,
-+            @"iPad6,7": @264,
-+            @"iPad6,8": @264,
-+            @"iPad6,11": @264,
-+            @"iPad6,12": @264,
-+            @"iPad7,1": @264,
-+            @"iPad7,2": @264,
-+            @"iPad7,3": @264,
-+            @"iPad7,4": @264,
-+            @"iPad7,5": @264,
-+            @"iPad7,6": @264,
-+            @"iPad7,11": @264,
-+            @"iPad7,12": @264,
-+            @"iPad8,1": @264,
-+            @"iPad8,2": @264,
-+            @"iPad8,3": @264,
-+            @"iPad8,4": @264,
-+            @"iPad8,5": @264,
-+            @"iPad8,6": @264,
-+            @"iPad8,7": @264,
-+            @"iPad8,8": @264,
-+            @"iPad11,1": @326,
-+            @"iPad11,2": @326,
-+            @"iPad11,3": @326,
-+            @"iPad11,4": @326,
-+            @"iPod1,1": @163,
-+            @"iPod2,1": @163,
-+            @"iPod3,1": @163,
-+            @"iPod4,1": @326,
-+            @"iPod5,1": @326,
-+            @"iPod7,1": @326,
-+            @"iPod9,1": @326,
-+        };
-+
-+        struct utsname systemInfo;
-+        uname(&systemInfo);
-+        NSString* deviceName =
-+            [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-+        id foundDPI = devices[deviceName];
-+        if (foundDPI) {
-+            self.screenDPI = (float)[foundDPI integerValue];
-+        } else {
-+            /*
-+             * Estimate the DPI based on the screen scale multiplied by the base DPI for the device
-+             * type (e.g. based on iPhone 1 and iPad 1)
-+             */
-+    #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
-+            float scale = (float)screen.nativeScale;
-+    #else
-+            float scale = (float)screen.scale;
-+    #endif
-+            float defaultDPI;
-+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-+                defaultDPI = 132.0f;
-+            } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-+                defaultDPI = 163.0f;
-+            } else {
-+                defaultDPI = 160.0f;
-+            }
-+            self.screenDPI = scale * defaultDPI;
-+        }
-+    }
-+    return self;
-+}
-+
- @synthesize uiscreen;
-+@synthesize screenDPI;
- 
- @end
- 
-@@ -153,14 +294,12 @@ UIKit_AddDisplay(UIScreen *uiscreen)
-     display.current_mode = mode;
- 
-     /* Allocate the display data */
--    SDL_DisplayData *data = [[SDL_DisplayData alloc] init];
-+    SDL_DisplayData *data = [[SDL_DisplayData alloc] initWithScreen:uiscreen];
-     if (!data) {
-         UIKit_FreeDisplayModeData(&display.desktop_mode);
-         return SDL_OutOfMemory();
-     }
- 
--    data.uiscreen = uiscreen;
--
-     display.driverdata = (void *) CFBridgingRetain(data);
-     SDL_AddVideoDisplay(&display);
- 
-@@ -243,6 +382,27 @@ UIKit_GetDisplayModes(_THIS, SDL_VideoDisplay * display)
-     }
- }
- 
-+int
-+UIKit_GetDisplayDPI(_THIS, SDL_VideoDisplay * display, float * ddpi, float * hdpi, float * vdpi)
-+{
-+    @autoreleasepool {
-+        SDL_DisplayData *data = (__bridge SDL_DisplayData *) display->driverdata;
-+        float dpi = data.screenDPI;
-+
-+        if (ddpi) {
-+            *ddpi = dpi * (float)SDL_sqrt(2.0);
-+        }
-+        if (hdpi) {
-+            *hdpi = dpi;
-+        }
-+        if (vdpi) {
-+            *vdpi = dpi;
-+        }
-+    }
-+
-+    return 0;
-+}
-+
- int
- UIKit_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode * mode)
- {
-diff --git a/src/video/uikit/SDL_uikitopengles.h b/src/video/uikit/SDL_uikitopengles.h
-index d08f4ac3e..6947898ed 100644
---- a/src/video/uikit/SDL_uikitopengles.h
-+++ b/src/video/uikit/SDL_uikitopengles.h
-@@ -21,6 +21,8 @@
- #ifndef SDL_uikitopengles_
- #define SDL_uikitopengles_
- 
-+#if SDL_VIDEO_OPENGL_ES2
-+
- #include "../SDL_sysvideo.h"
- 
- extern int UIKit_GL_MakeCurrent(_THIS, SDL_Window * window,
-@@ -35,6 +37,8 @@ extern int UIKit_GL_LoadLibrary(_THIS, const char *path);
- 
- extern void UIKit_GL_RestoreCurrentContext(void);
- 
-+#endif // SDL_VIDEO_OPENGL_ES2
-+
- #endif /* SDL_uikitopengles_ */
- 
- /* vi: set ts=4 sw=4 expandtab: */
-diff --git a/src/video/uikit/SDL_uikitopengles.m b/src/video/uikit/SDL_uikitopengles.m
-index 68d8f1d56..22944c63e 100644
---- a/src/video/uikit/SDL_uikitopengles.m
-+++ b/src/video/uikit/SDL_uikitopengles.m
-@@ -20,7 +20,7 @@
- */
- #include "../../SDL_internal.h"
- 
--#if SDL_VIDEO_DRIVER_UIKIT
-+#if SDL_VIDEO_DRIVER_UIKIT && SDL_VIDEO_OPENGL_ES2
- 
- #include "SDL_uikitopengles.h"
- #import "SDL_uikitopenglview.h"
-diff --git a/src/video/uikit/SDL_uikitopenglview.h b/src/video/uikit/SDL_uikitopenglview.h
-index a2657a3ea..2ef41d4eb 100644
---- a/src/video/uikit/SDL_uikitopenglview.h
-+++ b/src/video/uikit/SDL_uikitopenglview.h
-@@ -19,6 +19,8 @@
-   3. This notice may not be removed or altered from any source distribution.
- */
- 
-+#if SDL_VIDEO_OPENGL_ES2
-+
- #import <UIKit/UIKit.h>
- #import <OpenGLES/EAGL.h>
- #import <OpenGLES/ES3/gl.h>
-@@ -57,4 +59,6 @@
- 
- @end
- 
-+#endif // SDL_VIDEO_OPENGL_ES2
-+
- /* vi: set ts=4 sw=4 expandtab: */
-diff --git a/src/video/uikit/SDL_uikitopenglview.m b/src/video/uikit/SDL_uikitopenglview.m
-index b3ffbe895..c3e2e7ad2 100644
---- a/src/video/uikit/SDL_uikitopenglview.m
-+++ b/src/video/uikit/SDL_uikitopenglview.m
-@@ -20,7 +20,7 @@
- */
- #include "../../SDL_internal.h"
- 
--#if SDL_VIDEO_DRIVER_UIKIT
-+#if SDL_VIDEO_DRIVER_UIKIT && SDL_VIDEO_OPENGL_ES2
- 
- #include <OpenGLES/EAGLDrawable.h>
- #include <OpenGLES/ES2/glext.h>
-diff --git a/src/video/uikit/SDL_uikitvideo.m b/src/video/uikit/SDL_uikitvideo.m
-index cea40b239..51e904d6b 100644
---- a/src/video/uikit/SDL_uikitvideo.m
-+++ b/src/video/uikit/SDL_uikitvideo.m
-@@ -88,6 +88,7 @@ UIKit_CreateDevice(int devindex)
-         device->VideoInit = UIKit_VideoInit;
-         device->VideoQuit = UIKit_VideoQuit;
-         device->GetDisplayModes = UIKit_GetDisplayModes;
+       set(SOURCE_FILES ${SOURCE_FILES}
+           ${SDL2_SOURCE_DIR}/src/thread/pthread/SDL_systhread.c
+diff -r 682e469ffeed -r 304c6020419a src/video/uikit/SDL_uikitvideo.m
+--- a/src/video/uikit/SDL_uikitvideo.m	Sun Mar 29 01:54:00 2020 -0400
++++ b/src/video/uikit/SDL_uikitvideo.m	Sat Mar 28 15:43:55 2020 -0400
+@@ -102,6 +102,7 @@
+         device->DestroyWindow = UIKit_DestroyWindow;
+         device->GetWindowWMInfo = UIKit_GetWindowWMInfo;
+         device->GetDisplayUsableBounds = UIKit_GetDisplayUsableBounds;
 +        device->GetDisplayDPI = UIKit_GetDisplayDPI;
-         device->SetDisplayMode = UIKit_SetDisplayMode;
-         device->PumpEvents = UIKit_PumpEvents;
-         device->SuspendScreenSaver = UIKit_SuspendScreenSaver;
-@@ -115,6 +116,7 @@ UIKit_CreateDevice(int devindex)
-         device->HasClipboardText = UIKit_HasClipboardText;
  
-         /* OpenGL (ES) functions */
-+#if SDL_VIDEO_OPENGL_ES2
-         device->GL_MakeCurrent      = UIKit_GL_MakeCurrent;
-         device->GL_GetDrawableSize  = UIKit_GL_GetDrawableSize;
-         device->GL_SwapWindow       = UIKit_GL_SwapWindow;
-@@ -122,6 +124,7 @@ UIKit_CreateDevice(int devindex)
-         device->GL_DeleteContext    = UIKit_GL_DeleteContext;
-         device->GL_GetProcAddress   = UIKit_GL_GetProcAddress;
-         device->GL_LoadLibrary      = UIKit_GL_LoadLibrary;
-+#endif
-         device->free = UIKit_DeleteDevice;
- 
- #if SDL_VIDEO_VULKAN
-diff --git a/src/video/uikit/SDL_uikitviewcontroller.m b/src/video/uikit/SDL_uikitviewcontroller.m
-index 17221ebb0..f78aa67a8 100644
---- a/src/video/uikit/SDL_uikitviewcontroller.m
-+++ b/src/video/uikit/SDL_uikitviewcontroller.m
-@@ -180,7 +180,9 @@ SDL_HideHomeIndicatorHintChanged(void *userdata, const char *name, const char *o
-     /* Don't run the game loop while a messagebox is up */
-     if (!UIKit_ShowingMessageBox()) {
-         /* See the comment in the function definition. */
-+#if SDL_VIDEO_OPENGL_ES2
-         UIKit_GL_RestoreCurrentContext();
-+#endif
- 
-         animationCallback(animationCallbackParam);
-     }
-diff --git a/src/video/uikit/SDL_uikitwindow.m b/src/video/uikit/SDL_uikitwindow.m
-index 456122383..1f086051d 100644
---- a/src/video/uikit/SDL_uikitwindow.m
-+++ b/src/video/uikit/SDL_uikitwindow.m
-@@ -364,12 +364,16 @@ UIKit_GetWindowWMInfo(_THIS, SDL_Window * window, SDL_SysWMinfo * info)
- 
-             /* These struct members were added in SDL 2.0.4. */
-             if (versionnum >= SDL_VERSIONNUM(2,0,4)) {
-+#if SDL_VIDEO_OPENGL_ES2
-                 if ([data.viewcontroller.view isKindOfClass:[SDL_uikitopenglview class]]) {
-                     SDL_uikitopenglview *glview = (SDL_uikitopenglview *)data.viewcontroller.view;
-                     info->info.uikit.framebuffer = glview.drawableFramebuffer;
-                     info->info.uikit.colorbuffer = glview.drawableRenderbuffer;
-                     info->info.uikit.resolveFramebuffer = glview.msaaResolveFramebuffer;
-                 } else {
-+#else
-+                {
-+#endif
-                     info->info.uikit.framebuffer = 0;
-                     info->info.uikit.colorbuffer = 0;
-                     info->info.uikit.resolveFramebuffer = 0;
+ #if SDL_IPHONE_KEYBOARD
+         device->HasScreenKeyboardSupport = UIKit_HasScreenKeyboardSupport;

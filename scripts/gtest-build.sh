@@ -6,7 +6,7 @@ VERSION="$( cat "$DIR/gtest.version" )"
 FLAGS="$( cat "$DIR/gtest.flags" )"
 NAME="googletest-release-$VERSION"
 
-curl "https://codeload.github.com/google/googletest/tar.gz/release-$VERSION" \
+curl -L "https://github.com/google/googletest/archive/release-$VERSION.tar.gz" \
 	--output "$NAME.tar.gz" 
 tar xzf "$NAME.tar.gz"
 

@@ -10,17 +10,12 @@ curl "http://libsdl.org/release/$NAME.tar.gz" --output "$NAME.tar.gz"
 tar xzf "$NAME.tar.gz"
 
 if [ $PLATFORM = android ]; then
-	patch -p1 -d "$NAME" -i "$DIR/sdl-android-cmake-fix.patch"
-	patch -p1 -d "$NAME" -i "$DIR/sdl-external-context.patch"
 	FLAGS="$FLAGS -DSDL_STATIC=OFF"
 else
-	if [[ ( $PLATFORM = native && "$(uname)" = "Darwin" ) || $PLATFORM = ios ]]; then
-		patch -p1 -d "$NAME" -i "$DIR/sdl-external-context.patch"
-		if [ $PLATFORM = ios ]; then
-			patch -p1 -d "$NAME" -i "$DIR/sdl-ios-fix.patch"
-			# No OpenGL for iOS
-			FLAGS="$FLAGS -DVIDEO_OPENGL=OFF -DVIDEO_OPENGLES=OFF"
-		fi
+	if [ $PLATFORM = ios ]; then
+		patch -p1 -d "$NAME" -i "$DIR/sdl-ios-fix.patch"
+		# No OpenGL for iOS
+		FLAGS="$FLAGS -DVIDEO_OPENGL=OFF -DVIDEO_OPENGLES=OFF"
 	fi
 	FLAGS="$FLAGS -DSDL_SHARED=OFF"
 fi
