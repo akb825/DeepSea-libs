@@ -1,126 +1,15 @@
-diff -r 877c5d06c09e -r a747072c5ae5 CMakeLists.txt
---- a/CMakeLists.txt	Mon Apr 13 14:48:38 2020 -0400
-+++ b/CMakeLists.txt	Mon Apr 13 15:22:09 2020 -0400
-@@ -15,7 +15,6 @@
- # !!! FIXME:  properly resolved.
- #cmake_policy(SET CMP0042 OLD)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1670,7 +1670,11 @@
+     message_error("SDL_FILE must be enabled to build on MacOS X")
+   endif()
  
--include(CheckFunctionExists)
- include(CheckLibraryExists)
- include(CheckIncludeFiles)
- include(CheckIncludeFile)
-@@ -789,7 +788,8 @@
-       check_include_file("${_HEADER}" ${_HAVE_H})
-     endforeach()
- 
--    check_include_files("dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;strings.h;string.h;float.h" STDC_HEADERS)
-+    set(STDC_HEADER_NAMES "dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;stdio.h;strings.h;wchar.h;string.h;float.h")
-+    check_include_files("${STDC_HEADER_NAMES}" STDC_HEADERS)
-     check_type_size("size_t" SIZEOF_SIZE_T)
-     check_symbol_exists(M_PI math.h HAVE_M_PI)
-     # TODO: refine the mprotect check
-@@ -803,14 +803,21 @@
-             _uitoa _ultoa strtol strtoul _i64toa _ui64toa strtoll strtoull
-             atoi atof strcmp strncmp _stricmp strcasecmp _strnicmp strncasecmp
-             wcscmp wcsdup wcslcat wcslcpy wcslen wcsncmp wcsstr
--            sscanf vsscanf vsnprintf fopen64 fseeko fseeko64 sigaction setjmp
--            nanosleep sysconf sysctlbyname getauxval poll _Exit
-+            sscanf vsscanf vsnprintf fopen64 fseeko fseeko64 _Exit
-             )
-       string(TOUPPER ${_FN} _UPPER)
-       set(_HAVEVAR "HAVE_${_UPPER}")
--      check_function_exists("${_FN}" ${_HAVEVAR})
-+      check_symbol_exists("${_FN}" "${STDC_HEADER_NAMES}" ${_HAVEVAR})
-     endforeach()
- 
-+    check_symbol_exists(sigaction "signal.h" HAVE_SIGACTION)
-+    check_symbol_exists(setjmp "setjmp.h" HAVE_SETJMP)
-+    check_symbol_exists(nanosleep "time.h" HAVE_NANOSLEEP)
-+    check_symbol_exists(sysconf "unistd.h" HAVE_SYSCONF)
-+    check_symbol_exists(sysctlbyname "sys/types.h;sys/sysctl.h" HAVE_SYSCTLBYNAME)
-+    check_symbol_exists(getauxval "sys/auxv.h" HAVE_GETAUXVAL)
-+    check_symbol_exists(poll "poll.h" HAVE_POLL)
-+
-     check_library_exists(m pow "" HAVE_LIBM)
-     if(HAVE_LIBM)
-       set(CMAKE_REQUIRED_LIBRARIES m)
-@@ -821,7 +828,7 @@
-               asin asinf trunc truncf)
-         string(TOUPPER ${_FN} _UPPER)
-         set(_HAVEVAR "HAVE_${_UPPER}")
--        check_function_exists("${_FN}" ${_HAVEVAR})
-+        check_symbol_exists("${_FN}" "math.h" ${_HAVEVAR})
-       endforeach()
-       set(CMAKE_REQUIRED_LIBRARIES)
-       list(APPEND EXTRA_LIBS m)
-@@ -835,7 +842,7 @@
- 
-     if(NOT APPLE)
-       check_include_file(alloca.h HAVE_ALLOCA_H)
--      check_function_exists(alloca HAVE_ALLOCA)
-+      check_symbol_exists(alloca "alloca.h" HAVE_ALLOCA)
-     else()
-       set(HAVE_ALLOCA_H 1)
-       set(HAVE_ALLOCA 1)
-diff -r 877c5d06c09e -r a747072c5ae5 cmake/sdlchecks.cmake
---- a/cmake/sdlchecks.cmake	Mon Apr 13 14:48:38 2020 -0400
-+++ b/cmake/sdlchecks.cmake	Mon Apr 13 15:22:09 2020 -0400
-@@ -30,7 +30,7 @@
- endmacro()
- 
- macro(CheckDLOPEN)
--  check_function_exists(dlopen HAVE_DLOPEN)
-+  check_symbol_exists(dlopen "dlfcn.h" HAVE_DLOPEN)
-   if(NOT HAVE_DLOPEN)
-     foreach(_LIBNAME dl tdl)
-       check_library_exists("${_LIBNAME}" "dlopen" "" DLOPEN_LIB)
-@@ -424,7 +424,7 @@
-         set(X11_SHARED OFF)
-       endif()
- 
--      check_function_exists("shmat" HAVE_SHMAT)
-+      check_symbol_exists(shmat "sys/shm.h" HAVE_SHMAT)
-       if(NOT HAVE_SHMAT)
-         check_library_exists(ipc shmat "" HAVE_SHMAT)
-         if(HAVE_SHMAT)
-@@ -476,7 +476,7 @@
-         set(SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS 1)
-       endif()
- 
--      check_function_exists(XkbKeycodeToKeysym SDL_VIDEO_DRIVER_X11_HAS_XKBKEYCODETOKEYSYM)
-+      check_symbol_exists(XkbKeycodeToKeysym "X11/Xlib.h;X11/XKBlib.h" SDL_VIDEO_DRIVER_X11_HAS_XKBKEYCODETOKEYSYM)
- 
-       if(VIDEO_X11_XCURSOR AND HAVE_XCURSOR_H)
-         set(HAVE_VIDEO_X11_XCURSOR TRUE)
-@@ -901,12 +901,14 @@
-         endif()
-       endif()
- 
--      check_c_source_compiles("
--          #include <pthread.h>
--          #include <pthread_np.h>
--          int main(int argc, char** argv) { return 0; }" HAVE_PTHREAD_NP_H)
--      check_function_exists(pthread_setname_np HAVE_PTHREAD_SETNAME_NP)
--      check_function_exists(pthread_set_name_np HAVE_PTHREAD_SET_NAME_NP)
-+      check_include_files("pthread.h" HAVE_PTHREAD_H)
-+      check_include_files("pthread_np.h" HAVE_PTHREAD_NP_H)
-+      if (HAVE_PTHREAD_H)
-+        check_symbol_exists(pthread_setname_np "pthread.h" HAVE_PTHREAD_SETNAME_NP)
-+        if (HAVE_PTHREAD_NP_H)
-+          check_symbol_exists(pthread_set_name_np "pthread.h;pthread_np.h" HAVE_PTHREAD_SET_NAME_NP)
-+        endif()
-+      endif()
- 
-       set(SOURCE_FILES ${SOURCE_FILES}
-           ${SDL2_SOURCE_DIR}/src/thread/pthread/SDL_systhread.c
-diff -r 682e469ffeed -r 304c6020419a src/video/uikit/SDL_uikitvideo.m
---- a/src/video/uikit/SDL_uikitvideo.m	Sun Mar 29 01:54:00 2020 -0400
-+++ b/src/video/uikit/SDL_uikitvideo.m	Sat Mar 28 15:43:55 2020 -0400
-@@ -102,6 +102,7 @@
-         device->DestroyWindow = UIKit_DestroyWindow;
-         device->GetWindowWMInfo = UIKit_GetWindowWMInfo;
-         device->GetDisplayUsableBounds = UIKit_GetDisplayUsableBounds;
-+        device->GetDisplayDPI = UIKit_GetDisplayDPI;
- 
- #if SDL_IPHONE_KEYBOARD
-         device->HasScreenKeyboardSupport = UIKit_HasScreenKeyboardSupport;
+-  file(GLOB MISC_SOURCES ${SDL2_SOURCE_DIR}/src/misc/macosx/*.m)
++  if(IOS OR TVOS)
++    file(GLOB MISC_SOURCES ${SDL2_SOURCE_DIR}/src/misc/ios/*.m)
++  else()
++    file(GLOB MISC_SOURCES ${SDL2_SOURCE_DIR}/src/misc/macosx/*.m)
++  endif()
+   set(SOURCE_FILES ${SOURCE_FILES} ${MISC_SOURCES})
+   set(HAVE_SDL_MISC TRUE)
