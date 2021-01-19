@@ -4,3 +4,4 @@ DeepSea-libs*.*
 build-custom*.sh
 build-custom*.bat
 *.swp
+.DS_Store
