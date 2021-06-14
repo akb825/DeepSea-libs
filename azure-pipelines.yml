@@ -5,7 +5,7 @@ variables:
 jobs:
   - job: Linux
     pool:
-        vmImage: ubuntu-16.04
+        vmImage: ubuntu-18.04
     workspace:
         clean: all
     steps:
@@ -17,7 +17,7 @@ jobs:
         displayName: Publish
   - job: Android
     pool:
-        vmImage: ubuntu-16.04
+        vmImage: ubuntu-latest
     workspace:
         clean: all
     strategy:
