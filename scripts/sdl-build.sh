@@ -12,11 +12,6 @@ tar xzf "$NAME.tar.gz"
 if [ $PLATFORM = android ]; then
 	FLAGS="$FLAGS -DSDL_STATIC=OFF"
 else
-	if [ $PLATFORM = ios ]; then
-		patch -p1 -d "$NAME" -i "$DIR/sdl-ios-fix.patch"
-		# No OpenGL for iOS
-		FLAGS="$FLAGS -DVIDEO_OPENGL=OFF -DVIDEO_OPENGLES=OFF"
-	fi
 	FLAGS="$FLAGS -DSDL_SHARED=OFF"
 fi
 

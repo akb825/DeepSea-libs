@@ -40,7 +40,7 @@ jobs:
       - publish: $(Build.BinariesDirectory)/DeepSea-libs-android-$(platform).tar.gz
         artifact: Android $(platform)
         displayName: Publish
-  - job: Mac
+  - job: Mac_x86_64
     pool:
         vmImage: macOS-1015
     workspace:
@@ -50,11 +50,27 @@ jobs:
             export DEVELOPER_DIR=/Applications/Xcode_10.3.app/Contents/Developer
             SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk
             $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
-                -o DeepSea-libs-mac.tar.gz
+                -o DeepSea-libs-mac-x86_64.tar.gz
         workingDirectory: $(Build.BinariesDirectory)
         displayName: Build
-      - publish: $(Build.BinariesDirectory)/DeepSea-libs-mac.tar.gz
-        artifact: Mac
+      - publish: $(Build.BinariesDirectory)/DeepSea-libs-mac-x86_64.tar.gz
+        artifact: Mac-x86-64
+        displayName: Publish
+  - job: Mac_arm64
+    pool:
+        vmImage: macOS-11
+    workspace:
+        clean: all
+    steps:
+      - script: |
+            export DEVELOPER_DIR=/Applications/Xcode_13.0.app/Contents/Developer
+            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk
+            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
+                -DCMAKE_OSX_ARCHITECTURES=arm64 -o DeepSea-libs-mac-arm64.tar.gz
+        workingDirectory: $(Build.BinariesDirectory)
+        displayName: Build
+      - publish: $(Build.BinariesDirectory)/DeepSea-libs-mac-arm64.tar.gz
+        artifact: Mac-arm64
         displayName: Publish
   - job: iOS
     pool:
