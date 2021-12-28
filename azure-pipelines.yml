@@ -40,37 +40,30 @@ jobs:
       - publish: $(Build.BinariesDirectory)/DeepSea-libs-android-$(platform).tar.gz
         artifact: Android $(platform)
         displayName: Publish
-  - job: Mac_x86_64
+  - job: Mac
     pool:
-        vmImage: macOS-1015
+        vmImage: macOS-latest
+    strategy:
+        matrix:
+            arm64:
+                platform: arm64
+                name-postfix: -arm64
+            x86_64:
+                platform: x86_64
+                name-postfix: -x86_64
+            universal:
+                platform: arm64;x86_64
+                name-postfix: ""
     workspace:
         clean: all
     steps:
       - script: |
-            export DEVELOPER_DIR=/Applications/Xcode_10.3.app/Contents/Developer
-            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk
-            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
-                -o DeepSea-libs-mac-x86_64.tar.gz
+            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 \
+                -DCMAKE_OSX_ARCHITECTURES="$(platform)" -o DeepSea-libs-mac$(name-postfix).tar.gz
         workingDirectory: $(Build.BinariesDirectory)
         displayName: Build
-      - publish: $(Build.BinariesDirectory)/DeepSea-libs-mac-x86_64.tar.gz
-        artifact: Mac-x86-64
-        displayName: Publish
-  - job: Mac_arm64
-    pool:
-        vmImage: macOS-11
-    workspace:
-        clean: all
-    steps:
-      - script: |
-            export DEVELOPER_DIR=/Applications/Xcode_13.0.app/Contents/Developer
-            SYSROOT=$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk
-            $(Build.SourcesDirectory)/build.sh -DCMAKE_OSX_SYSROOT=$SYSROOT \
-                -DCMAKE_OSX_ARCHITECTURES=arm64 -o DeepSea-libs-mac-arm64.tar.gz
-        workingDirectory: $(Build.BinariesDirectory)
-        displayName: Build
-      - publish: $(Build.BinariesDirectory)/DeepSea-libs-mac-arm64.tar.gz
-        artifact: Mac-arm64
+      - publish: $(Build.BinariesDirectory)/DeepSea-libs-mac$(name-postfix).tar.gz
+        artifact: Mac $(platform)
         displayName: Publish
   - job: iOS
     pool:
@@ -87,7 +80,7 @@ jobs:
         displayName: Publish
   - job: Windows
     pool:
-        vmImage: windows-2019
+        vmImage: windows-latest
     workspace:
         clean: all
     strategy:
@@ -97,7 +90,7 @@ jobs:
             win64:
                 platform: win64
     steps:
-      - script: $(Build.SourcesDirectory)\build.bat -p $(platform) -o DeepSea-libs-$(platform).zip
+      - script: $(Build.SourcesDirectory)\build.bat -p $(platform) -T v140 -o DeepSea-libs-$(platform).zip
         workingDirectory: $(Build.BinariesDirectory)
         displayName: Build
       - publish: $(Build.BinariesDirectory)\DeepSea-libs-$(platform).zip
