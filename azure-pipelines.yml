@@ -67,7 +67,7 @@ jobs:
         displayName: Publish
   - job: iOS
     pool:
-        vmImage: macOS-1015
+        vmImage: macOS-latest
     workspace:
         clean: all
     steps:
@@ -80,7 +80,7 @@ jobs:
         displayName: Publish
   - job: Windows
     pool:
-        vmImage: windows-latest
+        vmImage: windows-2019
     workspace:
         clean: all
     strategy:
