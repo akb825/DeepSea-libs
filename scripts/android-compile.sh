@@ -3,7 +3,7 @@ set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 PROCESSORS="$( "$DIR/processors.sh" )"
-ANDROID_TOOLCHAIN="$DIR/../android/android.toolchain.cmake"
+ANDROID_TOOLCHAIN="$ANDROID_NDK/build/cmake/android.toolchain.cmake"
 
 rm -rf build
 mkdir build
