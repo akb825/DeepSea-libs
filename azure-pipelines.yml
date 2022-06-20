@@ -80,7 +80,7 @@ jobs:
         displayName: Publish
   - job: Windows
     pool:
-        vmImage: windows-2019
+        vmImage: windows-latest
     workspace:
         clean: all
     strategy:
@@ -90,7 +90,7 @@ jobs:
             win64:
                 platform: win64
     steps:
-      - script: $(Build.SourcesDirectory)\build.bat -p $(platform) -T v140 -o DeepSea-libs-$(platform).zip
+      - script: $(Build.SourcesDirectory)\build.bat -p $(platform) -T v141 -o DeepSea-libs-$(platform).zip
         workingDirectory: $(Build.BinariesDirectory)
         displayName: Build
       - publish: $(Build.BinariesDirectory)\DeepSea-libs-$(platform).zip
