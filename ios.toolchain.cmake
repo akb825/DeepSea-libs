@@ -51,7 +51,7 @@
 #
 # The following arguments control the behaviour of this toolchain:
 #
-# PLATFORM: (default "OS")
+# PLATFORM: (default "OS64")
 #    OS = Build for iPhoneOS.
 #    OS64 = Build for arm64 iphoneOS.
 #    OS64COMBINED = Build for arm64 x86_64 iphoneOS. Combined into FAT STATIC lib (supported on 3.14+ of CMakewith "-G Xcode" argument ONLY)
@@ -73,7 +73,7 @@
 #    CMAKE_OSX_SYSROOT, but can also be manually specified (although this should
 #    not be required).
 #
-# DEPLOYMENT_TARGET: Minimum SDK version to target. Default 2.0 on watchOS and 9.0 on tvOS+iOS
+# DEPLOYMENT_TARGET: Minimum SDK version to target. Default 2.0 on watchOS and 10.0 on tvOS+iOS
 #
 # ENABLE_BITCODE: (1|0) Enables or disables bitcode support. Default 1 (true)
 #
@@ -128,9 +128,7 @@ set(CMAKE_USE_PTHREADS_INIT 1)
 # Cache what generator is used
 set(USED_CMAKE_GENERATOR "${CMAKE_GENERATOR}" CACHE STRING "Expose CMAKE_GENERATOR" FORCE)
 
-# NOTE: A bug in CMake 3.14 prevents CAMKE_FIND_ROOT_PATH from working properly. Enable "modern"
-# CMake starting 3.15.
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.15")
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.14")
   set(MODERN_CMAKE YES)
   message(STATUS "Merging integrated CMake 3.14+ iOS,tvOS,watchOS,macOS toolchain(s) with this toolchain!")
 endif()
@@ -199,7 +197,7 @@ if(NOT DEFINED PLATFORM)
     endif()
   endif()
   if (NOT PLATFORM)
-    set(PLATFORM "OS")
+    set(PLATFORM "OS64")
   endif()
 endif()
 
@@ -343,8 +341,8 @@ if(NOT DEFINED DEPLOYMENT_TARGET)
     set(DEPLOYMENT_TARGET "2.0"
             CACHE STRING "Minimum SDK version to build for." )
   else()
-    # Unless specified, SDK version 9.0 is used by default as minimum target version (iOS, tvOS).
-    set(DEPLOYMENT_TARGET "9.0"
+    # Unless specified, SDK version 10.0 is used by default as minimum target version (iOS, tvOS).
+    set(DEPLOYMENT_TARGET "10.0"
             CACHE STRING "Minimum SDK version to build for." )
   endif()
   message(STATUS "Using the default min-version since DEPLOYMENT_TARGET not provided!")

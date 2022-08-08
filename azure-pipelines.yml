@@ -33,7 +33,7 @@ jobs:
     steps:
       - script: |
             $(Build.SourcesDirectory)/build.sh -p android \
-                --android-ndk $ANDROID_HOME/ndk-bundle --android-abi $(platform) \
+                --android-ndk $ANDROID_NDK_HOME --android-abi $(platform) \
                 -o DeepSea-libs-android-$(platform).tar.gz
         workingDirectory: $(Build.BinariesDirectory)
         displayName: Build
