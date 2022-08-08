@@ -1,8 +1,8 @@
 diff --git a/googletest/include/gtest/internal/gtest-port.h b/googletest/include/gtest/internal/gtest-port.h
-index 619498fa..678d0ad8 100644
+index 0003d276..9b771146 100644
 --- a/googletest/include/gtest/internal/gtest-port.h
 +++ b/googletest/include/gtest/internal/gtest-port.h
-@@ -1139,6 +1139,10 @@ Derived* CheckedDowncastToActualType(Base* base) {
+@@ -1129,6 +1129,10 @@ Derived* CheckedDowncastToActualType(Base* base) {
  
  #if GTEST_HAS_STREAM_REDIRECTION
  
@@ -14,10 +14,10 @@ index 619498fa..678d0ad8 100644
  //   CaptureStdout     - starts capturing stdout.
  //   GetCapturedStdout - stops capturing stdout and returns the captured string.
 diff --git a/googletest/src/gtest-port.cc b/googletest/src/gtest-port.cc
-index d47550ae..d2be7cdc 100644
+index d797fe4d..1e21201e 100644
 --- a/googletest/src/gtest-port.cc
 +++ b/googletest/src/gtest-port.cc
-@@ -1056,6 +1056,12 @@ GTEST_DISABLE_MSC_DEPRECATED_PUSH_()
+@@ -1033,6 +1033,12 @@ GTEST_DISABLE_MSC_DEPRECATED_PUSH_()
  // Object that captures an output stream (stdout/stderr).
  class CapturedStream {
   public:
@@ -29,8 +29,8 @@ index d47550ae..d2be7cdc 100644
 +
    // The ctor redirects the stream to a temporary file.
    explicit CapturedStream(int fd) : fd_(fd), uncaptured_fd_(dup(fd)) {
- # if GTEST_OS_WINDOWS
-@@ -1090,7 +1096,14 @@ class CapturedStream {
+ #if GTEST_OS_WINDOWS
+@@ -1066,7 +1072,14 @@ class CapturedStream {
      // The location /data/local/tmp is directly accessible from native code.
      // '/sdcard' and other variants cannot be relied on, as they are not
      // guaranteed to be mounted, or may have a delay in mounting.
@@ -43,10 +43,10 @@ index d47550ae..d2be7cdc 100644
 +            name_template.push_back('/');
 +        }
 +    }
- #  elif GTEST_OS_IOS
+ #elif GTEST_OS_IOS
      char user_temp_dir[PATH_MAX + 1];
  
-@@ -1165,9 +1178,17 @@ class CapturedStream {
+@@ -1139,10 +1152,18 @@ class CapturedStream {
    // Name of the temporary file holding the stderr output.
    ::std::string filename_;
  
@@ -54,7 +54,8 @@ index d47550ae..d2be7cdc 100644
 +  static std::string capture_dir_;
 +#endif
 +
-   GTEST_DISALLOW_COPY_AND_ASSIGN_(CapturedStream);
+   CapturedStream(const CapturedStream&) = delete;
+   CapturedStream& operator=(const CapturedStream&) = delete;
  };
  
 +#if GTEST_OS_LINUX_ANDROID
@@ -64,9 +65,9 @@ index d47550ae..d2be7cdc 100644
  GTEST_DISABLE_MSC_DEPRECATED_POP_()
  
  static CapturedStream* g_captured_stderr = nullptr;
-@@ -1193,6 +1214,13 @@ static std::string GetCapturedStream(CapturedStream** captured_stream) {
-   return content;
- }
+@@ -1177,6 +1198,13 @@ const int kStdOutFileno = STDOUT_FILENO;
+ const int kStdErrFileno = STDERR_FILENO;
+ #endif  // defined(_MSC_VER) || defined(__BORLANDC__)
  
 +#if GTEST_OS_LINUX_ANDROID
 +// Sets capture directory.
