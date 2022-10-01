@@ -11,11 +11,11 @@ tar xzf "$NAME.tar.gz"
 
 if [ $PLATFORM = android ]; then
 	FLAGS="$FLAGS -DSDL_STATIC=OFF"
-	patch -p1 -d "$NAME" -i "$DIR/sdl-android-fix.patch"
 else
 	# Disable OpenGL on Apple platforms.
 	if [[ $PLATFORM = ios || ($PLATFORM = native && $(uname -s) = Darwin) ]]; then
 		FLAGS="$FLAGS -DSDL_OPENGL=OFF -DSDL_OPENGLES=OFF"
+		patch -p1 -d "$NAME" -i "$DIR/sdl-mac-fix.patch"
 	fi
 	FLAGS="$FLAGS -DSDL_SHARED=OFF"
 fi
