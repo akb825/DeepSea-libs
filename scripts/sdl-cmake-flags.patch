@@ -1,0 +1,54 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7617205b5..0f83efc85 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -662,12 +662,7 @@ if(USE_GCC OR USE_CLANG)
+     list(APPEND EXTRA_CFLAGS "-Wshadow")
+   endif()
+ 
+-  if(APPLE)
+-    # FIXME: use generator expression instead of appending to EXTRA_LDFLAGS_BUILD
+-    list(APPEND EXTRA_LDFLAGS_BUILD "-Wl,-undefined,error")
+-    list(APPEND EXTRA_LDFLAGS_BUILD "-Wl,-compatibility_version,${DYLIB_COMPATIBILITY_VERSION}")
+-    list(APPEND EXTRA_LDFLAGS_BUILD "-Wl,-current_version,${DYLIB_CURRENT_VERSION}")
+-  elseif(NOT OPENBSD)
++  if(NOT APPLE AND NOT OPENBSD)
+     set(CMAKE_REQUIRED_FLAGS "-Wl,--no-undefined")
+     check_c_compiler_flag("" HAVE_NO_UNDEFINED)
+     set(CMAKE_REQUIRED_FLAGS ${ORIG_CMAKE_REQUIRED_FLAGS})
+@@ -3066,16 +3061,7 @@ if(SDL_SHARED)
+   # alias target for in-tree builds
+   add_library(SDL2::SDL2 ALIAS SDL2)
+   set_target_properties(SDL2 PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+-  if(APPLE)
+-    set_target_properties(SDL2 PROPERTIES
+-      MACOSX_RPATH 1
+-      OUTPUT_NAME "SDL2-${LT_RELEASE}")
+-  elseif(UNIX AND NOT ANDROID)
+-    set_target_properties(SDL2 PROPERTIES
+-      VERSION ${LT_VERSION}
+-      SOVERSION ${LT_MAJOR}
+-      OUTPUT_NAME "SDL2-${LT_RELEASE}")
+-  else()
++  if(NOT UNIX)
+     if(WINDOWS OR CYGWIN)
+       set_target_properties(SDL2 PROPERTIES
+         DEFINE_SYMBOL DLL_EXPORT)
+@@ -3289,17 +3275,6 @@ if(NOT SDL2_DISABLE_INSTALL)
+   endif()
+ 
+   if(NOT (WINDOWS OR CYGWIN) OR MINGW)
+-    if(SDL_SHARED)
+-      set(SOEXT ${CMAKE_SHARED_LIBRARY_SUFFIX}) # ".so", ".dylib", etc.
+-      get_target_property(SONAME SDL2 OUTPUT_NAME)
+-      if(NOT ANDROID AND NOT MINGW AND NOT OS2)
+-          install(CODE "
+-            execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+-              \"lib${SONAME}${SOPOSTFIX}${SOEXT}\" \"libSDL2${SOPOSTFIX}${SOEXT}\"
+-              WORKING_DIRECTORY \"${SDL2_BINARY_DIR}\")")
+-          install(FILES ${SDL2_BINARY_DIR}/libSDL2${SOPOSTFIX}${SOEXT} DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+-      endif()
+-    endif()
+     if(FREEBSD)
+       # FreeBSD uses ${PREFIX}/libdata/pkgconfig
+       install(FILES ${SDL2_BINARY_DIR}/sdl2.pc DESTINATION "libdata/pkgconfig")
