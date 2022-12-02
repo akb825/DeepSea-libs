@@ -42,7 +42,7 @@ jobs:
         displayName: Publish
   - job: Mac
     pool:
-        vmImage: macOS-latest
+        vmImage: macos-latest
     strategy:
         matrix:
             arm64:
@@ -67,7 +67,7 @@ jobs:
         displayName: Publish
   - job: iOS
     pool:
-        vmImage: macOS-latest
+        vmImage: macos-latest
     workspace:
         clean: all
     steps:
