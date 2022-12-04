@@ -1,5 +1,7 @@
 # Introduction
 
+[![DeepSea-libs](https://github.com/akb825/DeepSea-libs/actions/workflows/main.yml/badge.svg)](https://github.com/akb825/DeepSea-libs/actions/workflows/main.yml)
+
 DeepSea-libs provides scripts to build the external libraries dependencies for compiling [DeepSea](https://github.com/akb825/DeepSea). Pre-compiled releases are provided for the following platforms:
 
 * Linux for x86-64 (glibc 2.31 or later, e.g. Ubuntu 20.04)
@@ -13,8 +15,6 @@ This builds the following libraries:
 * [FreeType](https://www.freetype.org/) (not built for Linux)
 * [SDL](http://libsdl.org/) (not built for Linux)
 * [Google Test](https://github.com/google/googletest)
-
-[![Build Status](https://dev.azure.com/akb825/DeepSea/_apis/build/status/akb825.DeepSea-libs?branchName=master)](https://dev.azure.com/akb825/DeepSea/_build/latest?definitionId=4&branchName=master)
 
 # Dependencies
 
