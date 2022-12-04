@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Build
       run: ./build.sh -o DeepSea-libs-linux.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Linux
         path: "${{ github.workspace }}/DeepSea-libs-linux.tar.gz"
@@ -31,14 +31,14 @@ jobs:
         - x86_64
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Build
       run: |-
         ./build.sh -p android --android-ndk $ANDROID_NDK_HOME --android-abi ${{ matrix.platform }} \
           -o DeepSea-libs-android-${{ matrix.platform }}.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Android ${{ matrix.platform }}
         path: "${{ github.workspace }}/DeepSea-libs-android-${{ matrix.platform }}.tar.gz"
@@ -55,7 +55,7 @@ jobs:
           name-postfix: ''
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Build
       run: |-
        ./build.sh -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 \
@@ -63,7 +63,7 @@ jobs:
         -o DeepSea-libs-mac${{ matrix.name-postfix }}.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Mac ${{ matrix.platform }}
         path: "${{ github.workspace }}/DeepSea-libs-mac${{ matrix.name-postfix }}.tar.gz"
@@ -71,12 +71,12 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Build
       run: ./build.sh -p ios -o DeepSea-libs-ios.tar.gz
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: iOS
         path: "${{ github.workspace }}/DeepSea-libs-ios.tar.gz"
@@ -89,13 +89,13 @@ jobs:
         - win64
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Build
       run: |-
         .\\build.bat -p ${{ matrix.platform }} -T v141 -o DeepSea-libs-${{ matrix.platform }}.zip
       working-directory: "${{ github.workspace }}"
     - name: Publish
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Windows ${{ matrix.platform }}
         path: "${{ github.workspace }}\\DeepSea-libs-${{ matrix.platform }}.zip"
