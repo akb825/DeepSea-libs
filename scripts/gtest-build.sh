@@ -4,9 +4,9 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 VERSION="$( cat "$DIR/gtest.version" )"
 FLAGS="$( cat "$DIR/gtest.flags" )"
-NAME="googletest-release-$VERSION"
+NAME="googletest-$VERSION"
 
-curl -L "https://github.com/google/googletest/archive/release-$VERSION.tar.gz" \
+curl -L "https://github.com/google/googletest/archive/v$VERSION.tar.gz" \
 	--output "$NAME.tar.gz" 
 tar xzf "$NAME.tar.gz"
 
