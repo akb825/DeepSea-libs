@@ -81,7 +81,7 @@ jobs:
         name: iOS
         path: "${{ github.workspace }}/DeepSea-libs-ios.tar.gz"
   Windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     strategy:
       matrix:
         platform:
