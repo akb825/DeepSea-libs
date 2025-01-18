@@ -1,9 +1,9 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ccc9d4836..07aa58500 100644
+index 4bbf9d161..95eb80c64 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -3286,18 +3286,7 @@ if(SDL_SHARED)
-       target_link_libraries(SDL2 PRIVATE "-nodefaultlib:MSVCRT")
+@@ -3409,18 +3409,7 @@ if(SDL_SHARED)
+       target_compile_options(SDL2 PRIVATE /Q_no-use-libirc)
      endif()
    endif()
 -  if(APPLE)
@@ -22,7 +22,7 @@ index ccc9d4836..07aa58500 100644
      if(WINDOWS OR CYGWIN)
        set_target_properties(SDL2 PROPERTIES
          DEFINE_SYMBOL DLL_EXPORT)
-@@ -3518,17 +3507,6 @@ if(NOT SDL2_DISABLE_INSTALL)
+@@ -3682,17 +3671,6 @@ if(NOT SDL2_DISABLE_INSTALL)
              DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
    endif()
    if(NOT (WINDOWS OR CYGWIN) OR MINGW)

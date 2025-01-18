@@ -15,6 +15,7 @@ This builds the following libraries:
 * [FreeType](https://www.freetype.org/) (not built for Linux)
 * [SDL](http://libsdl.org/) (not built for Linux)
 * [Google Test](https://github.com/google/googletest)
+* [zlib-ng](https://github.com/zlib-ng/zlib-ng)
 
 # Dependencies
 

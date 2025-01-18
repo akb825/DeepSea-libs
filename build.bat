@@ -55,7 +55,7 @@ mkdir install
 rmdir build /S /Q > nul 2>&1
 mkdir build
 
-set LIBS=freetype harfbuzz sdl gtest
+set LIBS=freetype harfbuzz sdl gtest zlib-ng
 cd build
 for %%L in (%LIBS%) do (
 	echo Building %%L...
