@@ -6,7 +6,7 @@ DeepSea-libs provides scripts to build the external libraries dependencies for c
 
 * Linux for x86-64 (glibc 2.35 or later, e.g. Ubuntu 22.04)
 * macOS for x86-64 and arm64 (10.11 or later)
-* Windows for x86 and x86-64 with VS 2017 runtime.
+* Windows for x86 and x86-64 with VS 2019 runtime.
 * Android for x86, x86-64, armeabi-v7a, and arm64-v8a.
 
 This builds the following libraries:

@@ -81,7 +81,7 @@ jobs:
         name: iOS
         path: "${{ github.workspace }}/DeepSea-libs-ios.tar.gz"
   Windows:
-    runs-on: windows-2019
+    runs-on: windows-2025
     strategy:
       matrix:
         platform:
@@ -92,7 +92,7 @@ jobs:
       uses: actions/checkout@v4
     - name: Build
       run: |-
-        .\\build.bat -p ${{ matrix.platform }} -T v141 -o DeepSea-libs-${{ matrix.platform }}.zip
+        .\\build.bat -p ${{ matrix.platform }} -T v142 -o DeepSea-libs-${{ matrix.platform }}.zip
       working-directory: "${{ github.workspace }}"
     - name: Publish
       uses: actions/upload-artifact@v4
