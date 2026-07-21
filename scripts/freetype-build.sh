@@ -6,7 +6,7 @@ VERSION="$( cat "$DIR/freetype.version" )"
 FLAGS="$( cat "$DIR/freetype.flags" )"
 NAME="freetype-$VERSION"
 
-curl -L "https://download.savannah.gnu.org/releases/freetype/$NAME.tar.xz" \
+curl -L "https://mirrors.ocf.berkeley.edu/nongnu/freetype/$NAME.tar.xz" \
 	--output "$NAME.tar.xz"
 tar xJf "$NAME.tar.xz"
 

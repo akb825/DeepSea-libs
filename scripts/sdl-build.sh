@@ -4,14 +4,17 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 VERSION="$( cat "$DIR/sdl.version" )"
 FLAGS="$( cat "$DIR/sdl.flags" )"
-NAME="SDL2-$VERSION"
+NAME="SDL3-$VERSION"
 
-curl "http://libsdl.org/release/$NAME.tar.gz" --output "$NAME.tar.gz"
+curl "https://libsdl.org/release/$NAME.tar.gz" --output "$NAME.tar.gz"
 tar xzf "$NAME.tar.gz"
 
-patch -p1 -d "$NAME" -i "$DIR/sdl-cmake-flags.patch"
+# Disable OpenGL on Apple platforms.
+if [[ $PLATFORM = ios || ($PLATFORM = native && $(uname -s) = Darwin) ]]; then
+	FLAGS="$FLAGS -DSDL_OPENGL=OFF -DSDL_OPENGLES=OFF"
+fi
 
-# Shared library doesn't make sense on Android.
+# Static library doesn't make sense on Android.
 if [ $PLATFORM = android ]; then
 	FLAGS="$FLAGS -DSDL_STATIC=OFF"
 fi
