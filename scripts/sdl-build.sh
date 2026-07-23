@@ -14,9 +14,11 @@ if [[ $PLATFORM = ios || ($PLATFORM = native && $(uname -s) = Darwin) ]]; then
 	FLAGS="$FLAGS -DSDL_OPENGL=OFF -DSDL_OPENGLES=OFF"
 fi
 
-# Static library doesn't make sense on Android.
+# Need shared library for Android, use static for other platforms.
 if [ $PLATFORM = android ]; then
-	FLAGS="$FLAGS -DSDL_STATIC=OFF"
+	FLAGS="$FLAGS -DBUILD_SHARED_LIBS=ON"
+else
+	FLAGS="$FLAGS -DBUILD_SHARED_LIBS=OFF"
 fi
 
 pushd "$NAME" > /dev/null
